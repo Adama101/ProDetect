@@ -40,7 +40,7 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-foreground">Notification Preferences</CardTitle>
           <CardDescription>Control how you receive alerts and updates.</CardDescription>
-        </CardHeader>
+        </Header>
         <CardContent className="space-y-4">
           <div className="flex items-center space-x-2">
             <Checkbox id="emailNotifications" defaultChecked />
@@ -68,15 +68,15 @@ export default function SettingsPage() {
 
        <Card className="shadow-lg">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-foreground">System Settings</CardTitle>
-          <CardDescription>Configure system-wide parameters. (Placeholder)</CardDescription>
+          <CardTitle className="text-xl font-semibold text-foreground">System Configuration</CardTitle>
+          <CardDescription>Configure system-wide parameters, integrations, and regulatory settings.</CardDescription>
         </CardHeader>
         <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
               <SettingsIcon className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium text-muted-foreground">Advanced system configuration will be available here.</h3>
+              <h3 className="text-lg font-medium text-muted-foreground">Advanced System & AI Configuration</h3>
               <p className="text-sm text-muted-foreground">
-                Manage API keys, integrations, and other advanced settings.
+                Manage API keys, integrations, multi-jurisdictional regulation settings (e.g., FATCA, AUSTRAC), and AI agent parameters.
               </p>
             </div>
         </CardContent>

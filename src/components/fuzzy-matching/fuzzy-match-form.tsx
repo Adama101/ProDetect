@@ -8,11 +8,10 @@ import { enhanceMatching, type EnhanceMatchingInput, type EnhanceMatchingOutput 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast'; // Corrected import path
 
 const formSchema = z.object({
   nameToMatch: z.string().min(2, { message: 'Name to match must be at least 2 characters.' }),
@@ -75,7 +74,7 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
     <Card className="shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-foreground">AI-Powered Fuzzy Matching</CardTitle>
-        <CardDescription>Enter a name and a list of watchlist names (one per line) to find potential matches.</CardDescription>
+        <CardDescription>Enter a name and a list of watchlist names (one per line) to find potential matches. Supports sanctions and watchlist screening (e.g., OFAC, UN, EU).</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -87,7 +86,7 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
                 <FormItem>
                   <FormLabel htmlFor="nameToMatch">Name to Match</FormLabel>
                   <FormControl>
-                    <Input id="nameToMatch" placeholder="e.g., Jonh Smit" {...field} />
+                    <Input id="nameToMatch" placeholder="e.g., Jonh Smit / Acme Corp International" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,7 +102,7 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
                   <FormControl>
                     <Textarea
                       id="watchlistNames"
-                      placeholder="e.g., John Smith\nJonathan Smythe\nJon Smithe"
+                      placeholder="e.g., John Smith\nJonathan Smythe\nJon Smithe\nAcme Corporation\nACME Intl."
                       rows={8}
                       {...field}
                     />
@@ -117,10 +116,10 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
+                  Screening...
                 </>
               ) : (
-                'Find Matches'
+                'Screen Name'
               )}
             </Button>
           </form>

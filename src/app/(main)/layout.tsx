@@ -4,9 +4,11 @@ import {
   Home,
   Users,
   BellRing,
-  ShieldAlert,
+  ShieldCheck,
   Settings,
   SearchCode,
+  Activity, // For Behavioral Modeling
+  Eye, // For Transaction Monitoring
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -34,8 +36,10 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: '/', icon: Home, label: 'Dashboard', tooltip: 'Overview' },
-  { href: '/fuzzy-matching', icon: SearchCode, label: 'Fuzzy Matching', tooltip: 'AI Matching' },
-  { href: '/alerts-workflows', icon: BellRing, label: 'Alerts & Workflows', tooltip: 'Notifications' },
+  { href: '/transaction-monitoring', icon: Eye, label: 'Transactions', tooltip: 'Real-time Monitoring' },
+  { href: '/fuzzy-matching', icon: SearchCode, label: 'Fuzzy Matching', tooltip: 'AI Name Screening' },
+  { href: '/behavioral-modeling', icon: Activity, label: 'Behavioral Analytics', tooltip: 'Customer Segmentation & Anomalies' },
+  { href: '/alerts-workflows', icon: ShieldCheck, label: 'Compliance Ops', tooltip: 'Alerts, Cases & Workflows' },
 ];
 
 export default function AppLayout({ children }: { children: ReactNode }) {
