@@ -10,7 +10,7 @@ export default function ComplianceOperationsCenterPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Compliance Operations Center</h1>
           <p className="text-muted-foreground">
-            Monitor alerts, manage cases, and automate compliance workflows.
+            Monitor alerts, manage cases, automate compliance workflows with dynamic rules, and streamline regulatory reporting.
           </p>
         </div>
         <Button variant="outline">
@@ -28,7 +28,7 @@ export default function ComplianceOperationsCenterPage() {
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">Automated Compliance Engine</CardTitle>
             <CardDescription>
-              Configure no-code rules, automate task assignments, and manage policy enforcement. Leverage AI for initial assessments.
+              Configure no-code, dynamic risk-based rules, automate task assignments, and manage policy enforcement. Leverage AI and unified AML screening capabilities for initial assessments and continuous monitoring.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -64,7 +64,7 @@ export default function ComplianceOperationsCenterPage() {
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">Regulatory Reporting</CardTitle>
             <CardDescription>
-              Streamline SAR/STR filings and maintain audit-ready compliance records. (Coming Soon)
+              Utilize integrated reporting tools to streamline SAR/STR filings and maintain comprehensive, audit-ready compliance records. (Automation features rolling out)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -81,3 +81,4 @@ export default function ComplianceOperationsCenterPage() {
     </div>
   );
 }
+

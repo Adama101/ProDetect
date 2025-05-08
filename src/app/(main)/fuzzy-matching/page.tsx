@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -14,7 +15,7 @@ export default function FuzzyMatchingPage() {
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Fuzzy Matching</h1>
         <p className="text-muted-foreground">
-          Utilize AI to identify near-matches in watchlists, even with slight discrepancies in names or identifiers.
+          Employ AI for precise, high-fidelity screening against global watchlists, sanctions lists (e.g., OFAC, UN, EU), and PEP lists. Identify near-matches with advanced fuzzy logic.
         </p>
       </header>
 

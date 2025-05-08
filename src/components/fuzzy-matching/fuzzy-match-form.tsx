@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -74,7 +75,7 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
     <Card className="shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-foreground">AI-Powered Fuzzy Matching</CardTitle>
-        <CardDescription>Enter a name and a list of watchlist names (one per line) to find potential matches. Supports sanctions and watchlist screening (e.g., OFAC, UN, EU).</CardDescription>
+        <CardDescription>Enter a name and a list of watchlist names (one per line) for AI-powered screening. Supports global sanctions lists (e.g., OFAC, UN, EU), PEP lists, and other watchlists for comprehensive entity resolution.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -128,3 +129,4 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
     </Card>
   );
 }
+

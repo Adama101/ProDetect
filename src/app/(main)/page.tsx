@@ -8,7 +8,7 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-8">
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Risk & Compliance Dashboard</h1>
-        <p className="text-muted-foreground">Real-time overview of fraud, AML, and compliance status.</p>
+        <p className="text-muted-foreground">Comprehensive real-time overview of fraud, AML, risk, and compliance status, powered by dynamic analytics and AI.</p>
       </header>
 
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -75,3 +75,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

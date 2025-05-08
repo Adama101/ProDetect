@@ -87,7 +87,7 @@ export default function TransactionMonitoringPage() {
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Real-time Transaction Monitoring</h1>
         <p className="text-muted-foreground">
-          Oversee live transaction flows, detect suspicious activities, and manage AML/Fraud alerts.
+          Oversee live transaction flows, detect suspicious activities with dynamic risk-based rules, and manage AML/Fraud alerts through unified screening capabilities.
         </p>
       </header>
 
@@ -232,3 +232,4 @@ export default function TransactionMonitoringPage() {
     </div>
   );
 }
+
