@@ -9,6 +9,7 @@ import {
   SearchCode,
   Activity, // For Behavioral Modeling
   Eye, // For Transaction Monitoring
+  ClipboardList, // For Reports
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -40,6 +41,7 @@ const navItems: NavItem[] = [
   { href: '/fuzzy-matching', icon: SearchCode, label: 'Fuzzy Matching', tooltip: 'AI Name Screening' },
   { href: '/behavioral-modeling', icon: Activity, label: 'Behavioral Analytics', tooltip: 'Customer Segmentation & Anomalies' },
   { href: '/alerts-workflows', icon: ShieldCheck, label: 'Compliance Ops', tooltip: 'Alerts, Cases & Workflows' },
+  { href: '/reports', icon: ClipboardList, label: 'Reports', tooltip: 'Compliance Reporting' },
 ];
 
 export default function AppLayout({ children }: { children: ReactNode }) {
