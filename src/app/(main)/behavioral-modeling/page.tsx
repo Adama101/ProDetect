@@ -1,9 +1,10 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, BarChart3, Activity, SlidersHorizontal, Bot, UserCheck, UserX } from 'lucide-react';
+import { Users, Activity, SlidersHorizontal, Bot, UserCheck, UserX } from 'lucide-react';
 import {
   ChartConfig,
   ChartContainer,
@@ -13,6 +14,7 @@ import {
   ChartLegendContent,
 } from "@/components/ui/chart"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import { Skeleton } from '@/components/ui/skeleton';
 
 const customerSegmentsData = [
   { segment: 'Low Risk Retail', count: 12500, avgTxValue: 75 },
@@ -34,6 +36,12 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function BehavioralModelingPage() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -88,20 +96,26 @@ export default function BehavioralModelingPage() {
           <CardDescription>Distribution of customers across defined risk and behavioral segments.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-[400px] w-full">
-            <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={customerSegmentsData} margin={{ top: 5, right: 20, left: 20, bottom: 60 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false}/>
-              <XAxis dataKey="segment" angle={-30} textAnchor="end" interval={0} height={80} tick={{fontSize: 10}}/>
-              <YAxis yAxisId="left" orientation="left" stroke="hsl(var(--chart-1))" />
-              <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--chart-2))" />
-              <Tooltip content={<ChartTooltipContent />} />
-              <Legend content={<ChartLegendContent />} />
-              <Bar yAxisId="left" dataKey="count" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} name="Customer Count" />
-              <Bar yAxisId="right" dataKey="avgTxValue" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} name="Avg. Tx Value (USD)" />
-            </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          {isClient ? (
+            <ChartContainer config={chartConfig} className="h-[400px] w-full">
+              <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={customerSegmentsData} margin={{ top: 5, right: 20, left: 20, bottom: 60 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false}/>
+                <XAxis dataKey="segment" angle={-30} textAnchor="end" interval={0} height={80} tick={{fontSize: 10}}/>
+                <YAxis yAxisId="left" orientation="left" stroke="hsl(var(--chart-1))" />
+                <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--chart-2))" />
+                <Tooltip content={<ChartTooltipContent />} />
+                <Legend content={<ChartLegendContent />} />
+                <Bar yAxisId="left" dataKey="count" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} name="Customer Count" />
+                <Bar yAxisId="right" dataKey="avgTxValue" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} name="Avg. Tx Value (USD)" />
+              </BarChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          ) : (
+            <div className="h-[400px] w-full flex items-center justify-center text-muted-foreground">
+              <Skeleton className="h-full w-full" />
+            </div>
+          )}
         </CardContent>
       </Card>
       
@@ -147,3 +161,4 @@ export default function BehavioralModelingPage() {
     </div>
   );
 }
+
