@@ -75,7 +75,6 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
     <Card className="shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-foreground">AI-Powered Fuzzy Matching</CardTitle>
-        <CardDescription>Enter a name and a list of watchlist names (one per line) for AI-powered screening. Supports global sanctions lists (e.g., OFAC, UN, EU), PEP lists, and other watchlists for comprehensive entity resolution.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -87,7 +86,7 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
                 <FormItem>
                   <FormLabel htmlFor="nameToMatch">Name to Match</FormLabel>
                   <FormControl>
-                    <Input id="nameToMatch" placeholder="e.g., Jonh Smit / Acme Corp International" {...field} />
+                    <Input id="nameToMatch" placeholder="e.g., John Smith / Acorn Corp International" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,7 +102,7 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
                   <FormControl>
                     <Textarea
                       id="watchlistNames"
-                      placeholder="e.g., John Smith\nJonathan Smythe\nJon Smithe\nAcme Corporation\nACME Intl."
+                      placeholder="e.g., John Smith\nJonathan Smythe\nJon Smithe\nAcor Corporation\nACOR Intl."
                       rows={8}
                       {...field}
                     />

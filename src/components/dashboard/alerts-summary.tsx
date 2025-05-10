@@ -53,7 +53,6 @@ export function AlertsSummary() {
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div>
             <CardTitle className="text-xl font-semibold text-foreground">Key Compliance Activity</CardTitle>
-            <CardDescription>Recent high-priority alerts across AML, Fraud, and Sanctions.</CardDescription>
         </div>
         <Link href="/alerts-workflows">
           <Button variant="outline" size="sm">View All Cases</Button>

@@ -1,14 +1,22 @@
-import { Activity, ShieldCheck, DollarSign, Landmark, Users, AlertTriangle } from 'lucide-react';
-import { RiskScoreCard } from '@/components/dashboard/risk-score-card';
-import { RiskTrendChart } from '@/components/dashboard/risk-trend-chart';
-import { AlertsSummary } from '@/components/dashboard/alerts-summary';
+import {
+  Activity,
+  ShieldCheck,
+  DollarSign,
+  Landmark,
+  Users,
+  AlertTriangle,
+} from "lucide-react";
+import { RiskScoreCard } from "@/components/dashboard/risk-score-card";
+import { RiskTrendChart } from "@/components/dashboard/risk-trend-chart";
+import { AlertsSummary } from "@/components/dashboard/alerts-summary";
 
 export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-8">
       <header>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Risk & Compliance Dashboard</h1>
-        <p className="text-muted-foreground">Comprehensive real-time overview of fraud, AML, risk, and compliance status, powered by dynamic analytics and AI.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Dashboard
+        </h1>
       </header>
 
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -45,9 +53,9 @@ export default function DashboardPage() {
           iconColor="text-warning"
         />
       </section>
-
+      
       <section className="grid gap-6 md:grid-cols-2">
-         <RiskScoreCard
+        <RiskScoreCard
           title="High-Risk Customer Segments"
           score="4"
           trend="up"
@@ -55,7 +63,7 @@ export default function DashboardPage() {
           icon={Users}
           iconColor="text-warning"
         />
-         <RiskScoreCard
+        <RiskScoreCard
           title="Anomalous Behavior Alerts"
           score="23"
           trend="neutral"
@@ -75,4 +83,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

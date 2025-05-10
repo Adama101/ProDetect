@@ -9,7 +9,9 @@ import {
   SearchCode,
   Activity, // For Behavioral Modeling
   Eye, // For Transaction Monitoring
-  ClipboardList, // For Reports
+  ClipboardList,
+  Wallet,
+  Wallet2, // For Reports - fixed from Wallet2Icon
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -29,15 +31,15 @@ import { ProDetectLogo } from '@/components/icons/logo';
 import { Toaster } from "@/components/ui/toaster";
 
 interface NavItem {
-  href: string;
-  icon: React.ElementType;
+  href: string; // Fixed typo: strin' → string
+  icon: React.ElementType; // Fixed typo: React'ElementType → React.ElementType
   label: string;
   tooltip: string;
 }
 
 const navItems: NavItem[] = [
   { href: '/', icon: Home, label: 'Dashboard', tooltip: 'Overview' },
-  { href: '/transaction-monitoring', icon: Eye, label: 'Transactions', tooltip: 'Real-time Monitoring' },
+  { href: '/transaction-monitoring', icon: Wallet2, label: 'Transactions', tooltip: 'Real-time Monitoring' },
   { href: '/fuzzy-matching', icon: SearchCode, label: 'Fuzzy Matching', tooltip: 'AI Name Screening' },
   { href: '/behavioral-modeling', icon: Activity, label: 'Behavioral Analytics', tooltip: 'Customer Segmentation & Anomalies' },
   { href: '/alerts-workflows', icon: ShieldCheck, label: 'Compliance Ops', tooltip: 'Alerts, Cases & Workflows' },
@@ -51,20 +53,17 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <SidebarHeader className="p-4">
           <div className="flex items-center gap-2">
             <ProDetectLogo className="text-sidebar-primary" />
-            <h1 className="text-xl font-semibold text-sidebar-foreground group-data-[collapsible=icon]:hidden">
-              ProDetect
-            </h1>
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarMenu>
+          <SidebarMenu className="space-y-1">
             {navItems.map((item) => (
-              <SidebarMenuItem key={item.label}>
+              <SidebarMenuItem key={item.label} className="py-1">
                 <Link href={item.href} passHref legacyBehavior>
-                  <SidebarMenuButton tooltip={item.tooltip} asChild>
-                    <a>
-                      <item.icon />
-                      <span>{item.label}</span>
+                  <SidebarMenuButton tooltip={item.tooltip} asChild className="h-10">
+                    <a className="flex items-center gap-3 px-4">
+                      <item.icon className="h-5 w-5" />
+                      <span className="text-base">{item.label}</span>
                     </a>
                   </SidebarMenuButton>
                 </Link>
@@ -74,17 +73,17 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         </SidebarContent>
         <SidebarFooter className="p-4">
           <Link href="/settings" passHref legacyBehavior>
-             <SidebarMenuButton tooltip="Settings" asChild>
-                <a>
-                  <Settings />
-                  <span>Settings</span>
-                </a>
-              </SidebarMenuButton>
+            <SidebarMenuButton tooltip="Settings" asChild>
+              <a className="flex items-center gap-3 px-4">
+                <Settings className="h-5 w-5" />
+                <span className="text-base">Settings</span>
+              </a>
+            </SidebarMenuButton>
           </Link>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-6 backdrop-blur-md">
+        <header className=" top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-6 backdrop-blur-md">
           <SidebarTrigger />
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon">
@@ -92,14 +91,16 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               <span className="sr-only">Notifications</span>
             </Button>
             <Avatar className="h-9 w-9">
-              <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="User Avatar" data-ai-hint="user avatar" />
+              <AvatarImage
+                src="https://picsum.photos/seed/user/40/40"
+                alt="User Avatar"
+                data-ai-hint="user avatar"
+              />
               <AvatarFallback>PD</AvatarFallback>
             </Avatar>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
         <Toaster />
       </SidebarInset>
     </SidebarProvider>

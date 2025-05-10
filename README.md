@@ -1,6 +1,6 @@
-# Firebase Studio - ProDetect: Advanced Compliance Platform
+ProDetect: Advanced Compliance Platform
 
-ProDetect is a comprehensive Next.js application designed for advanced fraud detection, Anti-Money Laundering (AML) compliance, and risk management.
+ProDetect is a comprehensive application designed for advanced fraud detection, Anti-Money Laundering (AML) compliance, and risk management.
 
 ## Core Features:
 
@@ -29,4 +29,4 @@ ProDetect is a comprehensive Next.js application designed for advanced fraud det
 *   **Dynamic Risk Scoring**: AI enhances the accuracy and adaptability of risk scores for customers and transactions.
 *   **Narrative Generation**: Assists in generating narratives for flagged cases and potential SAR filings. (Features rolling out)
 
-To get started, take a look at `src/app/page.tsx`.
+More features coming soon.........
