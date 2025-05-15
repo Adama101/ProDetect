@@ -12,14 +12,14 @@ import { AlertsSummary } from "@/components/dashboard/alerts-summary";
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-3">
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           Dashboard
         </h1>
       </header>
 
-      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <RiskScoreCard
           title="Overall Compliance Risk"
           score="65"
@@ -53,8 +53,8 @@ export default function DashboardPage() {
           iconColor="text-warning"
         />
       </section>
-      
-      <section className="grid gap-6 md:grid-cols-2">
+
+      <section className="grid gap-4 md:grid-cols-2">
         <RiskScoreCard
           title="High-Risk Customer Segments"
           score="4"

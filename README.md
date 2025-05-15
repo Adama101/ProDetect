@@ -29,4 +29,43 @@ ProDetect is a comprehensive application designed for advanced fraud detection, 
 *   **Dynamic Risk Scoring**: AI enhances the accuracy and adaptability of risk scores for customers and transactions.
 *   **Narrative Generation**: Assists in generating narratives for flagged cases and potential SAR filings. (Features rolling out)
 
-More features coming soon.........
+
+//>> File structure for authentication system
+/src
+  /components
+    /auth
+      /Login
+        index.tsx
+        LoginForm.tsx
+      /Register
+        index.tsx
+        RegisterForm.tsx
+      /ForgotPassword
+        index.tsx
+        RequestResetForm.tsx
+      /ResetPassword
+        index.tsx
+        ResetPasswordForm.tsx
+      AuthLayout.tsx
+      AuthContext.tsx
+      AuthProvider.tsx
+      useAuth.tsx
+      types.ts
+  /hooks
+    useForm.tsx          # Custom form hook (optional)
+  /lib
+    /api
+      auth.ts            # Auth API services
+      api-client.ts      # Base API client
+  /app
+    /auth
+      /login
+        page.tsx
+      /register
+        page.tsx
+      /forgot-password
+        page.tsx
+      /reset-password
+        [token]          # Dynamic route for reset tokens
+          page.tsx
+      layout.tsx

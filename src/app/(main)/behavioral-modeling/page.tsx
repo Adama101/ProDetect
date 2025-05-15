@@ -20,9 +20,7 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
 import {
@@ -64,16 +62,12 @@ export default function BehavioralModelingPage() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Behavioral Modeling & Segmentation
           </h1>
-          <p className="text-muted-foreground">
-            Understand customer behavior, define segments, and detect anomalies
-            using advanced analytics.
-          </p>
         </div>
         <Button variant="outline">
           <Bot className="mr-2 h-4 w-4" />

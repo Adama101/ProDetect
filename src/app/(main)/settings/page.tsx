@@ -13,10 +13,9 @@ import { Settings as SettingsIcon, Send, BookText, PlugZap, UserCircle, Bell, Sh
 
 export default function SettingsPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4">
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Settings</h1>
-        <p className="text-muted-foreground">Manage your ProDetect application settings, preferences, and integrations.</p>
       </header>
 
       <Tabs defaultValue="general" className="w-full">
@@ -134,15 +133,12 @@ export default function SettingsPage() {
               <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center bg-muted/50">
                 <SettingsIcon className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium text-foreground">No-Code Rule & Policy Engine</h3>
-                <p className="text-sm text-muted-foreground">
-                  Configure detection rules, risk scoring typologies, automated workflows, and policy enforcement. Manage multi-jurisdictional regulation settings (e.g., FATCA, AUSTRAC) and AI model parameters.
-                </p>
               </div>
-               <Button variant="outline" className="mt-6">Access Rule Engine</Button>
+              <Button variant="outline" className="mt-6">Access Rules Engine</Button>
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="system-integration">
           <Card className="shadow-lg mt-6">
             <CardHeader>
@@ -150,16 +146,13 @@ export default function SettingsPage() {
               <CardDescription>Manage API keys, connect third-party services, and access system documentation.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-               <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center bg-muted/50">
+              <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center bg-muted/50">
                 <div className="flex gap-4">
                   <PlugZap className="h-10 w-10 text-muted-foreground mb-4" />
                   <BookText className="h-10 w-10 text-muted-foreground mb-4" />
                   <Send className="h-10 w-10 text-muted-foreground mb-4" />
                 </div>
                 <h3 className="text-lg font-medium text-foreground">API, Connectors & Documentation</h3>
-                <p className="text-sm text-muted-foreground">
-                  Set up data connectors, manage API keys for system integrations, access comprehensive developer guides, and configure secure channels for direct regulatory submissions.
-                </p>
               </div>
               <div className="flex flex-wrap gap-4">
                 <Button variant="outline">Manage API Keys</Button>

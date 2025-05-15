@@ -6,12 +6,9 @@ import { TrendingUp, ShieldCheck, FileText } from 'lucide-react';
 
 export default function ReportsPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4">
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Reports</h1>
-        <p className="text-muted-foreground">
-          Generate, manage, and review detailed compliance reports to improve decision-making and enhance audit readiness.
-        </p>
       </header>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">

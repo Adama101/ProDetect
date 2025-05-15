@@ -1,18 +1,15 @@
-import Link from 'next/link';
-import type { ReactNode } from 'react';
+import Link from "next/link";
+import type { ReactNode } from "react";
 import {
   Home,
-  Users,
   BellRing,
   ShieldCheck,
   Settings,
   SearchCode,
-  Activity, // For Behavioral Modeling
-  Eye, // For Transaction Monitoring
+  Activity,
   ClipboardList,
-  Wallet,
-  Wallet2, // For Reports - fixed from Wallet2Icon
-} from 'lucide-react';
+  Wallet2,
+} from "lucide-react";
 import {
   SidebarProvider,
   Sidebar,
@@ -24,26 +21,54 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarInset,
-} from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ProDetectLogo } from '@/components/icons/logo';
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ProDetectLogo } from "@/components/icons/logo";
 import { Toaster } from "@/components/ui/toaster";
 
 interface NavItem {
-  href: string; // Fixed typo: strin' → string
-  icon: React.ElementType; // Fixed typo: React'ElementType → React.ElementType
+  href: string;
+  icon: React.ElementType;
   label: string;
   tooltip: string;
 }
 
 const navItems: NavItem[] = [
-  { href: '/', icon: Home, label: 'Dashboard', tooltip: 'Overview' },
-  { href: '/transaction-monitoring', icon: Wallet2, label: 'Transactions', tooltip: 'Real-time Monitoring' },
-  { href: '/fuzzy-matching', icon: SearchCode, label: 'Fuzzy Matching', tooltip: 'AI Name Screening' },
-  { href: '/behavioral-modeling', icon: Activity, label: 'Behavioral Analytics', tooltip: 'Customer Segmentation & Anomalies' },
-  { href: '/alerts-workflows', icon: ShieldCheck, label: 'Compliance Ops', tooltip: 'Alerts, Cases & Workflows' },
-  { href: '/reports', icon: ClipboardList, label: 'Reports', tooltip: 'Compliance Reporting' },
+  { href: "/", 
+    icon: Home, label: "Dashboard", 
+    tooltip: "Overview" 
+  },
+  {
+    href: "/transaction-monitoring",
+    icon: Wallet2,
+    label: "Transactions",
+    tooltip: "Real-time Monitoring",
+  },
+  {
+    href: "/fuzzy-matching",
+    icon: SearchCode,
+    label: "Fuzzy Matching",
+    tooltip: "AI Name Screening",
+  },
+  {
+    href: "/behavioral-modeling",
+    icon: Activity,
+    label: "Behavioral Analytics",
+    tooltip: "Customer Segmentation & Anomalies",
+  },
+  {
+    href: "/alerts-workflows",
+    icon: ShieldCheck,
+    label: "Compliance Ops",
+    tooltip: "Alerts, Cases & Workflows",
+  },
+  {
+    href: "/reports",
+    icon: ClipboardList,
+    label: "Reports",
+    tooltip: "Compliance Reporting",
+  },
 ];
 
 export default function AppLayout({ children }: { children: ReactNode }) {
@@ -60,7 +85,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             {navItems.map((item) => (
               <SidebarMenuItem key={item.label} className="py-1">
                 <Link href={item.href} passHref legacyBehavior>
-                  <SidebarMenuButton tooltip={item.tooltip} asChild className="h-10">
+                  <SidebarMenuButton
+                    tooltip={item.tooltip}
+                    asChild
+                    className="h-10"
+                  >
                     <a className="flex items-center gap-3 px-4">
                       <item.icon className="h-5 w-5" />
                       <span className="text-base">{item.label}</span>

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'ProDetect Compliance Platform',
-  description: 'Advanced Fraud Detection, AML Compliance, and Risk Management by ProDetect',
+  description: 'Advanced Fraud Detection, AML Compliance, and Risk Management',
 };
 
 export default function RootLayout({

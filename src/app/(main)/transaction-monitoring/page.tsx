@@ -183,7 +183,7 @@ export default function TransactionMonitoringPage() {
   ); // Simplified conversion
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4">
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           Transaction Monitoring

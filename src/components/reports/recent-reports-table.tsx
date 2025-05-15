@@ -39,7 +39,7 @@ export function RecentReportsTable() {
     <Card className="shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl font-semibold">Recent Reports</CardTitle>
-        <CardDescription>View and manage your generated and scheduled compliance reports.</CardDescription>
+        <CardDescription>View and manage all generated and scheduled compliance reports.</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
@@ -73,7 +73,7 @@ export function RecentReportsTable() {
                     </Button>
                   )}
                   {report.viewUrl && (
-                     <Button variant="outline" size="sm" asChild>
+                    <Button variant="outline" size="sm" asChild>
                       <Link href={report.viewUrl}>
                         <Eye className="mr-1 h-3.5 w-3.5" />
                         View
@@ -81,18 +81,18 @@ export function RecentReportsTable() {
                     </Button>
                   )}
                   {(report.status === 'Generating' || report.status === 'Failed') && !report.viewUrl && !report.downloadUrl && (
-                     <span className="text-xs text-muted-foreground italic">No actions available</span>
+                    <span className="text-xs text-muted-foreground italic">No actions available</span>
                   )}
                 </TableCell>
               </TableRow>
             ))}
-             {mockReports.length === 0 && (
-                <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground py-10">
-                        No recent reports found.
-                    </TableCell>
-                </TableRow>
-              )}
+            {mockReports.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center text-muted-foreground py-10">
+                  No recent reports found.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>
