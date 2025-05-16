@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from 'react';
 import {
   Activity,
   ShieldCheck,
@@ -11,6 +14,27 @@ import { RiskTrendChart } from "@/components/dashboard/risk-trend-chart";
 import { AlertsSummary } from "@/components/dashboard/alerts-summary";
 
 export default function DashboardPage() {
+  // Use a simple state without TypeScript interface
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
+  
+  useEffect(() => {
+    // Only access window after component is mounted (client-side)
+    setWindowWidth(window.innerWidth);
+    setWindowHeight(window.innerHeight);
+    
+    // Add resize listener
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
   return (
     <div className="flex flex-col gap-3">
       <header>
