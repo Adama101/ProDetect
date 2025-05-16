@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FuzzyMatchForm } from "@/components/fuzzy-matching/fuzzy-match-form";
 import { MatchResultsTable } from "@/components/fuzzy-matching/match-results-table";
-import type { EnhanceMatchingOutput } from "@/ai/flows/enhance-matching";
+import { EnhanceMatchingOutput } from "@/ai/flows/enhance-matching";
 
 export default function FuzzyMatchingPage() {
   const [matchResults, setMatchResults] =
