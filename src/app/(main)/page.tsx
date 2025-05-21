@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import {
   Activity,
   ShieldCheck,
@@ -10,15 +11,26 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { RiskScoreCard } from "@/components/dashboard/risk-score-card";
-import { RiskTrendChart } from "@/components/dashboard/risk-trend-chart";
-import { AlertsSummary } from "@/components/dashboard/alerts-summary";
+// Dynamically import components that might use window
+const RiskTrendChart = dynamic(
+  () => import("@/components/dashboard/risk-trend-chart").then(mod => ({ default: mod.RiskTrendChart })),
+  { ssr: false }
+);
+const AlertsSummary = dynamic(
+  () => import("@/components/dashboard/alerts-summary").then(mod => ({ default: mod.AlertsSummary })),
+  { ssr: false }
+);
 
 export default function DashboardPage() {
   // Use a simple state without TypeScript interface
   const [windowWidth, setWindowWidth] = useState(0);
   const [windowHeight, setWindowHeight] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
+    // Mark component as mounted first
+    setIsMounted(true);
+    
     // Only access window after component is mounted (client-side)
     setWindowWidth(window.innerWidth);
     setWindowHeight(window.innerHeight);
@@ -35,6 +47,7 @@ export default function DashboardPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   
+  // Render base content regardless of window measurements
   return (
     <div className="flex flex-col gap-3">
       <header>
@@ -97,13 +110,17 @@ export default function DashboardPage() {
         />
       </section>
 
-      <section>
-        <RiskTrendChart />
-      </section>
+      {isMounted && (
+        <>
+          <section>
+            <RiskTrendChart />
+          </section>
 
-      <section>
-        <AlertsSummary />
-      </section>
+          <section>
+            <AlertsSummary />
+          </section>
+        </>
+      )}
     </div>
   );
 }
