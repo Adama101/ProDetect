@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -15,116 +14,128 @@ import { ApexOptions } from "apexcharts";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export function RiskTrendChart() {
-  // Use state to track if component is mounted (client-side)
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Chart options
   const options: ApexOptions = {
     chart: {
       id: "risk-trends",
       type: "area",
+      fontFamily: "Inter, sans-serif",
+      background: "transparent",
       toolbar: {
         show: false,
       },
-      fontFamily: "inherit",
-      background: "transparent",
+      animations: {
+        enabled: true,
+        speed: 800,
+        animateGradually: {
+          enabled: true,
+          delay: 150,
+        },
+      },
     },
     dataLabels: {
       enabled: false,
     },
     stroke: {
       curve: "smooth",
-      width: 2,
+      width: 3,
     },
     fill: {
       type: "gradient",
       gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.4,
-        opacityTo: 0.1,
-        stops: [0, 90, 100]
-      }
-    },
-    colors: ["#3b82f6", "#ef4444", "#f59e0b"],
-    grid: {
-      borderColor: "#f1f1f1",
-      strokeDashArray: 4,
-      xaxis: {
-        lines: {
-          show: true
-        }
+        shade: "light",
+        type: "vertical",
+        shadeIntensity: 0.4,
+        opacityFrom: 0.5,
+        opacityTo: 0.05,
+        stops: [0, 90, 100],
       },
-      yaxis: {
-        lines: {
-          show: true
-        }
-      }
+    },
+    colors: ["#3b82f6", "#ec4899", "#f59e0b"],
+    grid: {
+      borderColor: "#e5e7eb",
+      strokeDashArray: 4,
+      padding: {
+        left: 10,
+        right: 10,
+        top: 0,
+        bottom: 0,
+      },
     },
     tooltip: {
       theme: "dark",
       x: {
-        format: "MM yyyy"
-      }
+        format: "MMM",
+      },
     },
     xaxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+      categories: [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ],
       labels: {
         style: {
-          fontFamily: "inherit"
-        }
-      }
+          fontSize: "12px",
+          colors: "#6b7280",
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
     },
     yaxis: {
       labels: {
         style: {
-          fontFamily: "inherit"
-        }
-      }
+          fontSize: "12px",
+          colors: "#6b7280",
+        },
+      },
     },
     legend: {
       position: "top",
-      horizontalAlign: "right",
-      fontFamily: "inherit",
-      fontSize: "14px"
+      horizontalAlign: "center",
+      fontSize: "13px",
+      labels: {
+        colors: "#374151",
+      },
+      markers: {
+        size: 12,
+      },
     },
   };
 
-  // Chart series data
   const series = [
     {
       name: "Overall Risk",
-      data: [62, 60, 63, 65, 61, 64, 62, 65, 65],
+      data: [62, 60, 63, 65, 61, 64, 62, 65, 65, 64, 63, 61],
     },
     {
       name: "Fraud Attempts",
-      data: [15, 12, 10, 14, 16, 12, 8, 10, 7],
+      data: [15, 12, 10, 14, 16, 12, 8, 10, 7, 9, 11, 10],
     },
     {
       name: "Compliance Alerts",
-      data: [8, 10, 12, 15, 13, 16, 18, 14, 15],
+      data: [8, 10, 12, 15, 13, 16, 18, 14, 15, 13, 12, 14],
     },
   ];
 
   return (
-    <Card className="border shadow-sm">
+    <Card className="border shadow-md rounded-2xl bg-white dark:bg-zinc-900 transition-all duration-300">
       <CardHeader className="pb-2">
-        <CardTitle>Risk Trends (6-Month)</CardTitle>
+        <CardTitle className="text-lg text-gray-800 dark:text-white">
+          Risk Trends
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        {isMounted && (
-          <Chart
-            options={options}
-            series={series}
-            type="area"
-            height={350}
-          />
-        )}
-        {!isMounted && (
-          <div className="flex items-center justify-center h-[350px] bg-muted/20 rounded-md">
+        {isMounted ? (
+          <Chart options={options} series={series} type="area" height={350} />
+        ) : (
+          <div className="flex items-center justify-center h-[350px] bg-muted/20 rounded-lg">
             <p className="text-muted-foreground">Loading chart...</p>
           </div>
         )}
