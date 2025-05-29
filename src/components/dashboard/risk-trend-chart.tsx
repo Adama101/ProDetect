@@ -1,145 +1,144 @@
 "use client";
 
-import React from "react";
-import Chart, { Props } from "react-apexcharts";
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ApexOptions } from "apexcharts";
 
-const seriesData: Props["series"] = [
-  {
-    name: "Suspicious Transactions",
-    data: [25, 35, 28, 45, 60, 80, 75],
-  },
-  {
-    name: "High-Risk Transactions",
-    data: [15, 20, 30, 25, 35, 45, 50],
-  },
-  {
-    name: "Alerts Generated",
-    data: [18, 40, 35, 55, 70, 90, 85],
-  },
-];
-
-const chartOptions: Props["options"] = {
-  chart: {
-    type: "area",
-    animations: {
-      enabled: true,
-      speed: 500,
-      animateGradually: {
-        enabled: true,
-        delay: 150
-      }
-    },
-    id: "risk-trend-chart", 
-    foreColor: "hsl(var(--foreground))",
-    toolbar: {
-      show: true,
-    },
-    background: "transparent",
-  },
-  xaxis: {
-    categories: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ],
-    labels: {
-      style: {
-        colors: "hsl(var(--muted-foreground))",
-      },
-    },
-    axisBorder: {
-      color: "hsl(var(--border))",
-    },
-    axisTicks: {
-      color: "hsl(var(--border))",
-    },
-  },
-  yaxis: {
-    labels: {
-      style: {
-        colors: "hsl(var(--muted-foreground))",
-      },
-    },
-    title: {
-      text: "Count of Transactions / Alerts",
-      style: {
-        color: "hsl(var(--muted-foreground))",
-      },
-    },
-  },
-  tooltip: {
-    enabled: true,
-    theme: "dark",
-    x: {
-      show: true,
-    },
-    y: {
-      formatter: (val) => `${val} events`,
-    },
-  },
-  grid: {
-    borderColor: "hsl(var(--border))",
-    strokeDashArray: 5,
-  },
-  stroke: {
-    curve: "smooth",
-    width: 2,
-  },
-  fill: {
-    type: "gradient",
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.2,
-      opacityTo: 0.2,
-      stops: [0, 90, 100],
-    },
-  },
-  markers: {
-    size: 5,
-    colors: [
-      "hsl(var(--chart-4))",
-      "hsl(var(--destructive))",
-      "hsl(var(--chart-1))",
-    ],
-  },
-  colors: [
-    "hsl(var(--chart-4))",
-    "hsl(var(--destructive))",
-    "hsl(var(--chart-1))",
-  ],
-};
+// Dynamically import ApexCharts with SSR disabled
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export function RiskTrendChart() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const options: ApexOptions = {
+    chart: {
+      id: "risk-trends",
+      type: "area",
+      fontFamily: "Inter, sans-serif",
+      background: "transparent",
+      toolbar: {
+        show: false,
+      },
+      animations: {
+        enabled: true,
+        speed: 800,
+        animateGradually: {
+          enabled: true,
+          delay: 150,
+        },
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth",
+      width: 3,
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "light",
+        type: "vertical",
+        shadeIntensity: 0.4,
+        opacityFrom: 0.5,
+        opacityTo: 0.05,
+        stops: [0, 90, 100],
+      },
+    },
+    colors: ["#3b82f6", "#ec4899", "#f59e0b"],
+    grid: {
+      borderColor: "#e5e7eb",
+      strokeDashArray: 4,
+      padding: {
+        left: 10,
+        right: 10,
+        top: 0,
+        bottom: 0,
+      },
+    },
+    tooltip: {
+      theme: "dark",
+      x: {
+        format: "MMM",
+      },
+    },
+    xaxis: {
+      categories: [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ],
+      labels: {
+        style: {
+          fontSize: "12px",
+          colors: "#6b7280",
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: "12px",
+          colors: "#6b7280",
+        },
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "center",
+      fontSize: "13px",
+      labels: {
+        colors: "#374151",
+      },
+      markers: {
+        size: 12,
+      },
+    },
+  };
+
+  const series = [
+    {
+      name: "Overall Risk",
+      data: [62, 60, 63, 65, 61, 64, 62, 65, 65, 64, 63, 61],
+    },
+    {
+      name: "Fraud Attempts",
+      data: [15, 12, 10, 14, 16, 12, 8, 10, 7, 9, 11, 10],
+    },
+    {
+      name: "Compliance Alerts",
+      data: [8, 10, 12, 15, 13, 16, 18, 14, 15, 13, 12, 14],
+    },
+  ];
+
   return (
-    <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold text-foreground">
-          Risk Trend Analysis
+    <Card className="border shadow-md rounded-2xl bg-white dark:bg-zinc-900 transition-all duration-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg text-gray-800 dark:text-white">
+          Risk Trends
         </CardTitle>
-        <CardDescription>
-          Weekly count of transactions and alerts.
-        </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="w-full">
-          <Chart
-            options={chartOptions}
-            series={seriesData}
-            type="area"
-            height={425}
-          />
-        </div>
+        {isMounted ? (
+          <Chart options={options} series={series} type="area" height={350} />
+        ) : (
+          <div className="flex items-center justify-center h-[350px] bg-muted/20 rounded-lg">
+            <p className="text-muted-foreground">Loading chart...</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
