@@ -117,21 +117,6 @@ export function UserAuthForm({
     }
 
     // This function could handle social login that needs window
-    const handleSocialLogin = (provider: string) => {
-        if (typeof window !== 'undefined') {
-            // Example: Store intended redirect location
-            window.localStorage.setItem('authRedirect', window.location.pathname);
-            
-            // Redirect to OAuth provider
-            // window.location.href = `/api/auth/${provider}`;
-            
-            // For now, just show a toast
-            toast({
-                title: "Social login",
-                description: `${provider} login not implemented yet.`,
-            });
-        }
-    };
 
     return (
         <div className={`grid gap-6 ${className}`} {...props}>

@@ -116,8 +116,8 @@ export default function RegisterPage() {
                             <select className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white focus:border-[#007b94] focus:ring-2 focus:ring-[#007b94] focus:outline-none">
                                 <option value="" className="text-gray-400">Select...</option>
                                 <option value="Finance" className="text-white bg-gray-800">Finance</option>
-                                <option value="Health" className="text-white bg-gray-800">Health</option>
-                                <option value="Education" className="text-white bg-gray-800">Education</option>
+                                <option value="Insurance " className="text-white bg-gray-800">Insurance</option>
+                                <option value="E-Commerce" className="text-white bg-gray-800">E-Commerce</option>
                                 <option value="Government" className="text-white bg-gray-800">Government</option>
                             </select>
                         </div>
