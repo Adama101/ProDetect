@@ -192,10 +192,6 @@ export default function BehavioralModelingPage() {
             <CardTitle className="text-xl font-semibold text-foreground">
               Anomaly Detection Rules
             </CardTitle>
-            <CardDescription>
-              Configure and manage rules for identifying unusual behavior
-              patterns. (Feature coming soon)
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
@@ -218,10 +214,6 @@ export default function BehavioralModelingPage() {
             <CardTitle className="text-xl font-semibold text-foreground">
               Segment-Specific Models
             </CardTitle>
-            <CardDescription>
-              Develop and deploy tailored behavioral models for each customer
-              segment. (Feature coming soon)
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
@@ -231,7 +223,7 @@ export default function BehavioralModelingPage() {
               </h3>
               <p className="text-sm text-muted-foreground">
                 Train, test, and monitor the performance of your behavioral
-                models.
+                models. (Feature coming soon)
               </p>
               <Button variant="secondary" className="mt-4">
                 Manage Models

@@ -37,14 +37,14 @@ interface AlertItem {
 }
 
 const mockAlerts: AlertItem[] = [
-  { id: 'ALT001', description: 'Potential watchlist match: Johnathan K. Doe', date: '2024-07-15', severity: 'Critical', status: 'Open', entity: 'Client Acc XA1001', assignedTo: 'AML Team Lead', riskScore: 95, caseStatus: 'Pending Review', tags: ['Sanctions', 'KYC'], source: 'Watchlist Screening'},
-  { id: 'ALT002', description: 'Unusual transaction pattern: High volume, low value to new beneficiary', date: '2024-07-14', severity: 'High', status: 'In Review', entity: 'Merchant M5050 / TXN77882', assignedTo: 'Fraud Analyst B', riskScore: 82, caseStatus: 'Investigation', tags: ['AML', 'Transaction Monitoring', 'Behavioral Anomaly'], source: 'Real-time Monitoring'},
-  { id: 'ALT003', description: 'Name variation: Jane Smith vs. Janne Smyth (DOB Match)', date: '2024-07-13', severity: 'Medium', status: 'Open', entity: 'Beneficiary B007', assignedTo: 'Analyst A', riskScore: 65, caseStatus: 'New', tags: ['KYC'], source: 'Fuzzy Matching Engine'},
-  { id: 'ALT004', description: 'Address anomaly flagged during onboarding', date: '2024-07-12', severity: 'Low', status: 'Resolved', entity: 'Customer CUST9923', assignedTo: 'System (Auto-Resolved)', riskScore: 30, caseStatus: 'Closed - False Positive', tags: ['KYC'], source: 'Onboarding Check'},
-  { id: 'ALT005', description: 'High-risk country transaction to PEP', date: '2024-07-11', severity: 'High', status: 'Open', entity: 'Payment P00123 ($50,000)', assignedTo: 'Compliance Officer', riskScore: 88, caseStatus: 'Escalated', tags: ['AML', 'Sanctions'], source: 'Transaction Monitoring'},
-  { id: 'ALT006', description: 'Login from unrecognized device & location', date: '2024-07-10', severity: 'Medium', status: 'Closed', entity: 'User U7362', assignedTo: 'System (User Verified)', riskScore: 55, caseStatus: 'Closed - Valid', tags: ['Fraud', 'Behavioral Anomaly'], source: 'Security Module'},
-  { id: 'ALT007', description: 'Sanctions list screening positive hit: OFAC SDN', date: '2024-07-09', severity: 'Critical', status: 'In Review', entity: 'Company Corp International Ltd.', assignedTo: 'Sanctions Team', riskScore: 100, caseStatus: 'SAR Filed', tags: ['Sanctions'], source: 'Batch Screening'},
-  { id: 'ALT008', description: 'Structuring attempt: Multiple cash deposits below threshold', date: '2024-07-08', severity: 'High', status: 'Open', entity: 'Account ACCT0567', assignedTo: 'AML Analyst C', riskScore: 78, caseStatus: 'Investigation', tags: ['AML', 'Transaction Monitoring'], source: 'Rule Engine'},
+  { id: 'ALT001', description: 'Potential watchlist match: Johnathan K. Doe', date: '2024-07-15', severity: 'Critical', status: 'Open', entity: 'Client Acc XA1001', assignedTo: 'AML Team Lead', riskScore: 95, caseStatus: 'Pending Review', tags: ['Sanctions', 'KYC'], source: 'Watchlist Screening' },
+  { id: 'ALT002', description: 'Unusual transaction pattern: High volume, low value to new beneficiary', date: '2024-07-14', severity: 'High', status: 'In Review', entity: 'Merchant M5050 / TXN77882', assignedTo: 'Fraud Analyst B', riskScore: 82, caseStatus: 'Investigation', tags: ['AML', 'Transaction Monitoring', 'Behavioral Anomaly'], source: 'Real-time Monitoring' },
+  { id: 'ALT003', description: 'Name variation: Jane Smith vs. Janne Smyth (DOB Match)', date: '2024-07-13', severity: 'Medium', status: 'Open', entity: 'Beneficiary B007', assignedTo: 'Analyst A', riskScore: 65, caseStatus: 'New', tags: ['KYC'], source: 'Fuzzy Matching Engine' },
+  { id: 'ALT004', description: 'Address anomaly flagged during onboarding', date: '2024-07-12', severity: 'Low', status: 'Resolved', entity: 'Customer CUST9923', assignedTo: 'System (Auto-Resolved)', riskScore: 30, caseStatus: 'Closed - False Positive', tags: ['KYC'], source: 'Onboarding Check' },
+  { id: 'ALT005', description: 'High-risk country transaction to PEP', date: '2024-07-11', severity: 'High', status: 'Open', entity: 'Payment P00123 ($50,000)', assignedTo: 'Compliance Officer', riskScore: 88, caseStatus: 'Escalated', tags: ['AML', 'Sanctions'], source: 'Transaction Monitoring' },
+  { id: 'ALT006', description: 'Login from unrecognized device & location', date: '2024-07-10', severity: 'Medium', status: 'Closed', entity: 'User U7362', assignedTo: 'System (User Verified)', riskScore: 55, caseStatus: 'Closed - Valid', tags: ['Fraud', 'Behavioral Anomaly'], source: 'Security Module' },
+  { id: 'ALT007', description: 'Sanctions list screening positive hit: OFAC SDN', date: '2024-07-09', severity: 'Critical', status: 'In Review', entity: 'Company Corp International Ltd.', assignedTo: 'Sanctions Team', riskScore: 100, caseStatus: 'SAR Filed', tags: ['Sanctions'], source: 'Batch Screening' },
+  { id: 'ALT008', description: 'Structuring attempt: Multiple cash deposits below threshold', date: '2024-07-08', severity: 'High', status: 'Open', entity: 'Account ACCT0567', assignedTo: 'AML Analyst C', riskScore: 78, caseStatus: 'Investigation', tags: ['AML', 'Transaction Monitoring'], source: 'Rule Engine' },
 ];
 
 const severityConfig: Record<AlertSeverity, { icon: React.ElementType, colorClass: string, badgeVariant: "destructive" | "warning" | "secondary" | "outline" }> = {
@@ -77,7 +77,7 @@ export function AlertsList() {
   const [severityFilter, setSeverityFilter] = useState<AlertSeverity[]>([]);
 
   const toggleSeverityFilter = (severity: AlertSeverity) => {
-    setSeverityFilter(prev => 
+    setSeverityFilter(prev =>
       prev.includes(severity) ? prev.filter(s => s !== severity) : [...prev, severity]
     );
   };
@@ -85,11 +85,11 @@ export function AlertsList() {
   const filteredAlerts = mockAlerts.filter(alert => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = alert.description.toLowerCase().includes(searchLower) ||
-                          alert.entity.toLowerCase().includes(searchLower) ||
-                          alert.id.toLowerCase().includes(searchLower) ||
-                          (alert.tags && alert.tags.some(tag => tag.toLowerCase().includes(searchLower))) ||
-                          (alert.caseStatus && alert.caseStatus.toLowerCase().includes(searchLower)) ||
-                          alert.source.toLowerCase().includes(searchLower);
+      alert.entity.toLowerCase().includes(searchLower) ||
+      alert.id.toLowerCase().includes(searchLower) ||
+      (alert.tags && alert.tags.some(tag => tag.toLowerCase().includes(searchLower))) ||
+      (alert.caseStatus && alert.caseStatus.toLowerCase().includes(searchLower)) ||
+      alert.source.toLowerCase().includes(searchLower);
     const matchesSeverity = severityFilter.length === 0 || severityFilter.includes(alert.severity);
     return matchesSearch && matchesSeverity;
   });
@@ -99,8 +99,8 @@ export function AlertsList() {
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search alerts (ID, entity, tag...)" 
+          <Input
+            placeholder="Search alerts (ID, entity, tag...)"
             className="pl-10"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -141,7 +141,7 @@ export function AlertsList() {
               <CardHeader className="pb-3">
                 <div className="flex justify-between items-start gap-2">
                   <Badge variant={severityConf.badgeVariant} className="flex items-center gap-1.5 text-sm py-1 px-2.5 whitespace-nowrap">
-                    <SeverityIcon className={`h-4 w-4 ${severityConf.badgeVariant === 'destructive' || severityConf.badgeVariant === 'warning' ? '' : severityConf.colorClass }`} />
+                    <SeverityIcon className={`h-4 w-4 ${severityConf.badgeVariant === 'destructive' || severityConf.badgeVariant === 'warning' ? '' : severityConf.colorClass}`} />
                     {alert.severity}
                   </Badge>
                   <div className="flex items-center gap-2">
@@ -150,7 +150,7 @@ export function AlertsList() {
                   </div>
                 </div>
                 <CardTitle className="text-base font-semibold pt-2 text-foreground">{alert.description}</CardTitle>
-                 <CardDescription className="text-xs">Source: {alert.source} &bull; Date: {alert.date}</CardDescription>
+                <CardDescription className="text-xs">Source: {alert.source} &bull; Date: {alert.date}</CardDescription>
               </CardHeader>
               <CardContent className="text-sm space-y-3 flex-grow">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2">
@@ -159,7 +159,7 @@ export function AlertsList() {
                   {alert.assignedTo && <p><strong className="text-muted-foreground block text-xs">Assigned to:</strong> {alert.assignedTo}</p>}
                   {alert.caseStatus && caseConf && (
                     <p className="flex items-center">
-                      <strong className="text-muted-foreground block text-xs mr-1">Case:</strong> 
+                      <strong className="text-muted-foreground block text-xs mr-1">Case:</strong>
                       <Badge variant="outline" className={`px-1.5 py-0.5 text-xs border-none ${caseConf.colorClass}`}>
                         <Circle className={`mr-1 h-2 w-2 fill-current`} />
                         {alert.caseStatus}
@@ -167,15 +167,15 @@ export function AlertsList() {
                     </p>
                   )}
                 </div>
-                
+
                 {alert.riskScore !== undefined && (
                   <div className="space-y-1">
                     <div className="flex justify-between items-center text-xs">
-                       <span className="text-muted-foreground">Risk Score:</span>
-                       <span className={`font-medium ${alert.riskScore > 80 ? 'text-destructive' : alert.riskScore > 60 ? 'text-warning' : 'text-success'}`}>{alert.riskScore}/100</span>
+                      <span className="text-muted-foreground">Risk Score:</span>
+                      <span className={`font-medium ${alert.riskScore > 80 ? 'text-destructive' : alert.riskScore > 60 ? 'text-warning' : 'text-success'}`}>{alert.riskScore}/100</span>
                     </div>
-                    <Progress value={alert.riskScore} className="h-1.5" 
-                      indicatorClassName={alert.riskScore > 80 ? 'bg-destructive' : alert.riskScore > 60 ? 'bg-warning' : 'bg-success'} 
+                    <Progress value={alert.riskScore} className="h-1.5"
+                      indicatorClassName={alert.riskScore > 80 ? 'bg-destructive' : alert.riskScore > 60 ? 'bg-warning' : 'bg-success'}
                     />
                   </div>
                 )}
@@ -191,7 +191,7 @@ export function AlertsList() {
               </CardContent>
               <Separator className="my-3" />
               <div className="p-4 pt-0">
-                 <Button variant="outline" size="sm" className="w-full">Investigate Case</Button>
+                <Button variant="outline" size="sm" className="w-full">Investigate Case</Button>
               </div>
             </Card>
           );
