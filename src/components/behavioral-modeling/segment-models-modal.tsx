@@ -80,7 +80,7 @@ import {
 } from "@/components/ui/chart";
 import {
   ResponsiveContainer,
-  LineChart,
+  LineChart as RechartsLineChart,
   Line,
   XAxis,
   YAxis,
@@ -784,7 +784,7 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                   className="h-[300px]"
                 >
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={performanceMetrics}>
+                    <RechartsLineChart data={performanceMetrics}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="month" />
                       <YAxis />
@@ -810,7 +810,7 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                         strokeWidth={2}
                         dot={{ r: 4 }}
                       />
-                    </LineChart>
+                    </RechartsLineChart>
                   </ResponsiveContainer>
                 </ChartContainer>
               </CardContent>
