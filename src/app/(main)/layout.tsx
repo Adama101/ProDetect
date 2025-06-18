@@ -148,7 +148,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           <SidebarMenu className="space-y-1">
             {navItems.map((item) => (
               <SidebarMenuItem key={item.label} className="py-1">
-                <Link href={item.href} passHref legacyBehavior>
+                <Link href={item.href}>
                   <SidebarMenuButton
                     tooltip={item.tooltip}
                     asChild
@@ -165,7 +165,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-4">
-          <Link href="/settings" passHref legacyBehavior>
+          <Link href="/settings">
             <SidebarMenuButton tooltip="Settings" asChild>
               <a className="flex items-center gap-3 px-4">
                 <Settings className="h-5 w-5" />
@@ -243,7 +243,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                   aria-label="User menu"
                 >
                   <li>
-                    <Link href="/profile" passHref legacyBehavior>
+                    <Link href="/profile">
                       <a
                         className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                         role="menuitem"
@@ -254,7 +254,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/settings" passHref legacyBehavior>
+                    <Link href="/settings">
                       <a
                         className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                         role="menuitem"
