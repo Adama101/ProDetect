@@ -48,7 +48,7 @@ import {
   Activity,
   BarChart3,
   PieChart,
-  LineChart,
+  LineChart as LineChartIcon,
   Settings,
   Play,
   Pause,
@@ -770,7 +770,7 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <LineChart className="h-5 w-5" />
+                  <LineChartIcon className="h-5 w-5" />
                   Performance Trends (6 Months)
                 </CardTitle>
               </CardHeader>
