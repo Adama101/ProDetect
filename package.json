@@ -1,5 +1,5 @@
 {
-  "name": "nextn",
+  "name": "prodetect",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:setup": "psql -h $DB_HOST -U $DB_USER -d $DB_NAME -f src/lib/database/schema.sql",
+    "db:seed": "psql -h $DB_HOST -U $DB_USER -d $DB_NAME -f src/lib/database/seed.sql",
+    "db:migrate": "npm run db:setup && npm run db:seed"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.6.2",
@@ -51,6 +54,7 @@
     "next": "^15.3.2",
     "next-auth": "^4.24.11",
     "patch-package": "^8.0.0",
+    "pg": "^8.11.3",
     "react": "^18.3.1",
     "react-apexcharts": "^1.7.0",
     "react-day-picker": "^8.10.1",
@@ -63,6 +67,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pg": "^8.10.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "genkit-cli": "^1.6.1",

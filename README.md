@@ -1,71 +1,300 @@
-ProDetect: Advanced Compliance Platform
+# ProDetect: Advanced Compliance Platform
 
-ProDetect is a comprehensive application designed for advanced fraud detection, Anti-Money Laundering (AML) compliance, and risk management.
+ProDetect is a comprehensive AI-native application designed for advanced fraud detection, Anti-Money Laundering (AML) compliance, and risk management, specifically built for African financial institutions with CBN baseline standard compliance.
 
-## Core Features:
+## 🏗️ System Architecture
 
-### 🛡️ Fraud & AML Detection
-*   **Real-Time Alerts & Monitoring**: Instantly detects and addresses suspicious activities with dynamic risk-based rules. Monitors live transaction flows.
-*   **Unified AML Screening**: Screens transactions and entities against global watchlists, sanctions (e.g., OFAC, UN, EU), and Politically Exposed Persons (PEP) lists with precision.
-*   **Advanced Name Matching**: Utilizes AI-powered fuzzy logic for accurate name screening against watchlists, even with slight discrepancies.
-*   **Risk-Based Scoring & Typologies**: Implements sophisticated risk scoring for customers and transactions, leveraging predefined and customizable typologies.
-*   **Behavioral Modeling & Segmentation**: Understands customer behavior, defines segments, and detects anomalies using advanced analytics and AI.
+### Core Components
 
-### ⚙️ Compliance Automation & Workflow Management
-*   **No-Code Rule Configuration**: Empowers compliance teams to define and manage detection rules and workflows without requiring code.
-*   **Automated SAR/STR Filings**: Streamlines the preparation and submission of Suspicious Activity Reports (SARs) and Suspicious Transaction Reports (STRs). (Automation features rolling out)
-*   **Multi-Jurisdictional Regulation Support**: Adapts to various regulatory requirements (e.g., FATCA, AUSTRAC).
-*   **Policy Enforcement Workflows**: Manages and automates policy adherence across the organization.
-*   **Centralized Case Management**: Provides a unified platform for handling alerts, managing investigations, and tracking case progress end-to-end.
-*   **Automated Task Assignment**: Assigns tasks to relevant team members based on predefined rules and workflows.
+#### 1. Data Layer
+- **Customer Management**: KYC/CDD data, risk profiles, PEP status
+- **Transaction Processing**: Real-time transaction ingestion and storage
+- **Alert Management**: Suspicious activity detection and tracking
+- **Case Management**: Investigation workflows and resolution tracking
+- **Rules Engine**: Configurable AML detection rules
+- **Reporting**: STR/CTR generation and regulatory compliance
+- **Audit Trail**: Immutable logging for compliance
 
-### 📊 Dashboards & Integrated Reporting
-*   **Real-Time Dashboards**: Offers a live overview of risk, compliance status, and key metrics.
-*   **Suspicious Activity Insights**: Provides actionable intelligence from detected anomalies and flagged activities.
-*   **Comprehensive Reporting Tools**: Generates detailed compliance reports, enhancing decision-making and ensuring audit readiness.
+#### 2. Business Logic Layer
+- **Risk Scoring Engine**: Dynamic customer risk assessment
+- **Transaction Monitoring**: Real-time suspicious activity detection
+- **Rules Management**: No-code rule creation and deployment
+- **Case Workflow**: Investigation assignment and tracking
+- **Report Generation**: Automated regulatory reporting
+- **Integration Services**: External system connectivity
 
-### 🤖 AI-Driven Tools
-*   **AI Agents for Investigations**: Leverages AI for case summarization, evidence gathering, and initial assessment of alerts. (Features rolling out)
-*   **Dynamic Risk Scoring**: AI enhances the accuracy and adaptability of risk scores for customers and transactions.
-*   **Narrative Generation**: Assists in generating narratives for flagged cases and potential SAR filings. (Features rolling out)
+#### 3. API Layer
+- RESTful APIs for all core functionality
+- Real-time transaction ingestion endpoints
+- Webhook support for external integrations
+- Secure authentication and authorization
 
+#### 4. Frontend Layer
+- **Dashboard**: Real-time monitoring and analytics
+- **Case Management**: Investigation workflow interface
+- **Rules Builder**: Visual rule creation interface
+- **Reporting**: Compliance report generation and export
+- **User Management**: Role-based access control
 
-//>> File structure for authentication system
-/src
-  /components
-    /auth
-      /Login
-        index.tsx
-        LoginForm.tsx
-      /Register
-        index.tsx
-        RegisterForm.tsx
-      /ForgotPassword
-        index.tsx
-        RequestResetForm.tsx
-      /ResetPassword
-        index.tsx
-        ResetPasswordForm.tsx
-      AuthLayout.tsx
-      AuthContext.tsx
-      AuthProvider.tsx
-      useAuth.tsx
-      types.ts
-  /hooks
-    useForm.tsx          # Custom form hook (optional)
-  /lib
-    /api
-      auth.ts            # Auth API services
-      api-client.ts      # Base API client
-  /app
-    /auth
-      /login
-        page.tsx
-      /register
-        page.tsx
-      /forgot-password
-        page.tsx
-      /reset-password
-        [token]          # Dynamic route for reset tokens
-          page.tsx
-      layout.tsx
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- PostgreSQL 14+
+- Redis (optional, for caching)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd prodetect
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+4. **Set up the database**
+   ```bash
+   # Create PostgreSQL database
+   createdb prodetect
+   
+   # Run migrations and seed data
+   npm run db:migrate
+   ```
+
+5. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+The application will be available at `http://localhost:9002`
+
+### Database Setup
+
+The application uses PostgreSQL with a comprehensive schema designed for compliance and audit requirements:
+
+```bash
+# Setup database schema
+npm run db:setup
+
+# Seed with sample data
+npm run db:seed
+
+# Or run both
+npm run db:migrate
+```
+
+## 🔧 API Endpoints
+
+### Core APIs
+
+#### Customers
+- `GET /api/customers` - List customers with filtering and pagination
+- `POST /api/customers` - Create new customer
+- `GET /api/customers/[id]` - Get customer details
+- `PUT /api/customers/[id]` - Update customer
+- `DELETE /api/customers/[id]` - Soft delete customer
+
+#### Transactions
+- `GET /api/transactions` - List transactions with filtering
+- `POST /api/transactions` - Create new transaction
+- `GET /api/transactions/[id]` - Get transaction details
+- `PUT /api/transactions/[id]/status` - Update transaction status
+
+#### Alerts
+- `GET /api/alerts` - List alerts with filtering
+- `POST /api/alerts` - Create new alert
+- `PUT /api/alerts/[id]/status` - Update alert status
+- `PUT /api/alerts/[id]/assign` - Assign alert to user
+
+#### Analytics
+- `GET /api/analytics/dashboard` - Dashboard analytics
+- `GET /api/analytics/transactions` - Transaction analytics
+- `GET /api/analytics/alerts` - Alert analytics
+
+## 🛡️ Security Features
+
+### Authentication & Authorization
+- Role-based access control (RBAC)
+- JWT-based authentication
+- Session management
+- Two-factor authentication support
+
+### Data Protection
+- End-to-end encryption for sensitive data
+- Row Level Security (RLS) in database
+- Audit logging for all operations
+- Data retention policies (5+ years)
+
+### Compliance
+- CBN baseline standard adherence
+- Automated STR/CTR generation
+- Immutable audit trails
+- KYC/CDD verification workflows
+
+## 🔗 Integration Points
+
+### Core Banking Systems
+- Real-time transaction feeds
+- Customer data synchronization
+- Account status updates
+
+### External Services
+- **Sanctions Screening**: OFAC, UN, EU sanctions lists
+- **Watchlist APIs**: PEP and adverse media screening
+- **Regulatory Reporting**: NFIU integration
+- **Document Verification**: KYC document validation
+
+### Notification Systems
+- Email notifications
+- SMS alerts
+- Slack integration
+- Webhook callbacks
+
+## 🤖 AI/ML Features
+
+### Behavioral Analytics
+- Customer segmentation models
+- Anomaly detection algorithms
+- Pattern recognition for fraud detection
+- Dynamic risk scoring
+
+### Fuzzy Matching
+- AI-powered name screening
+- Contextual similarity matching
+- False positive reduction
+- Multi-language support
+
+### Automated Workflows
+- Smart case assignment
+- Evidence collection automation
+- Risk assessment automation
+- Predictive analytics
+
+## 📊 Compliance Features
+
+### Regulatory Reporting
+- Automated SAR/STR generation
+- Regulatory submission workflows
+- Compliance dashboard
+- Audit trail maintenance
+
+### Risk Management
+- Real-time risk scoring
+- Customer due diligence (CDD)
+- Enhanced due diligence (EDD)
+- Ongoing monitoring
+
+### Case Management
+- Investigation workflows
+- Evidence management
+- Collaborative case handling
+- Resolution tracking
+
+## 🔧 Development
+
+### Project Structure
+```
+src/
+├── app/                    # Next.js app router
+│   ├── (auth)/            # Authentication pages
+│   ├── (main)/            # Main application pages
+│   └── api/               # API routes
+├── components/            # React components
+│   ├── ui/                # Base UI components
+│   ├── alerts/            # Alert-specific components
+│   ├── compliance/        # Compliance components
+│   └── behavioral-modeling/ # Analytics components
+├── lib/                   # Utilities and services
+│   ├── api/               # API service layer
+│   ├── database/          # Database schema and connection
+│   └── hooks/             # Custom React hooks
+└── ai/                    # AI/ML integration
+    └── flows/             # GenKit AI flows
+```
+
+### Key Technologies
+- **Frontend**: Next.js 15, React 18, TypeScript, Tailwind CSS
+- **Backend**: Node.js, PostgreSQL, Redis
+- **AI/ML**: Google GenKit, TensorFlow.js
+- **UI Components**: Radix UI, shadcn/ui
+- **Charts**: Recharts, ApexCharts
+- **Authentication**: NextAuth.js
+
+### Database Schema
+The application uses a comprehensive PostgreSQL schema with:
+- Customer management tables
+- Transaction processing tables
+- Alert and case management
+- Rules engine configuration
+- Audit logging
+- Behavioral model storage
+
+## 🚀 Deployment
+
+### Production Setup
+1. Set up PostgreSQL database
+2. Configure environment variables
+3. Run database migrations
+4. Build and deploy the application
+5. Set up monitoring and logging
+
+### Environment Variables
+See `.env.example` for required configuration:
+- Database connection
+- API keys for external services
+- Security configurations
+- Notification service settings
+
+## 📈 Monitoring & Analytics
+
+### Performance Monitoring
+- Real-time system metrics
+- API response times
+- Database performance
+- Error tracking with Sentry
+
+### Compliance Metrics
+- Alert generation rates
+- False positive tracking
+- Investigation timelines
+- Regulatory submission status
+
+### Business Intelligence
+- Customer risk distribution
+- Transaction volume analytics
+- Fraud detection effectiveness
+- Compliance officer productivity
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📄 License
+
+This project is proprietary software. All rights reserved.
+
+## 🆘 Support
+
+For technical support or questions:
+- Create an issue in the repository
+- Contact the development team
+- Refer to the documentation
+
+---
+
+**ProDetect** - Advanced AI-Native Compliance Platform for African Financial Institutions
