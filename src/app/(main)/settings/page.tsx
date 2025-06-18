@@ -1,6 +1,6 @@
-
 'use client';
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,8 +10,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Settings as SettingsIcon, Send, BookText, PlugZap, UserCircle, Bell, Shield, Cog, Link2 } from "lucide-react";
+import { NoCodeRulesBuilderModal } from "@/components/settings/no-code-rules-builder-modal";
+import { ApiManagementModal } from "@/components/settings/api-management-modal";
+import { DataConnectorsModal } from "@/components/settings/data-connectors-modal";
+import { DocumentationAccessModal } from "@/components/settings/documentation-access-modal";
+import { RegulatorySubmissionModal } from "@/components/settings/regulatory-submission-modal";
+import { RoleBasedAccessModal } from "@/components/settings/role-based-access-modal";
 
 export default function SettingsPage() {
+  const [showNoCodeRulesModal, setShowNoCodeRulesModal] = useState(false);
+  const [showApiManagementModal, setShowApiManagementModal] = useState(false);
+  const [showDataConnectorsModal, setShowDataConnectorsModal] = useState(false);
+  const [showDocumentationModal, setShowDocumentationModal] = useState(false);
+  const [showRegulatorySubmissionModal, setShowRegulatorySubmissionModal] = useState(false);
+  const [showRoleBasedAccessModal, setShowRoleBasedAccessModal] = useState(false);
+
   return (
     <div className="flex flex-col gap-4">
       <header>
@@ -116,6 +129,12 @@ export default function SettingsPage() {
                   Enable Two-Factor Authentication (2FA)
                 </Label>
               </div>
+              <div className="flex items-center space-x-3 pt-2">
+                <Button variant="outline" onClick={() => setShowRoleBasedAccessModal(true)}>
+                  <Shield className="h-4 w-4 mr-2" />
+                  Manage Role-Based Access
+                </Button>
+              </div>
               <Button>Update Security Settings</Button>
             </CardContent>
           </Card>
@@ -133,8 +152,14 @@ export default function SettingsPage() {
               <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center bg-muted/50">
                 <SettingsIcon className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium text-foreground">No-Code Rule & Policy Engine</h3>
+                <p className="text-sm text-muted-foreground mt-2 mb-4">
+                  Create, customize, and deploy compliance rules without coding using our visual builder
+                </p>
               </div>
-              <Button variant="outline" className="mt-6">Access Rules Engine</Button>
+              <Button variant="outline" className="mt-6" onClick={() => setShowNoCodeRulesModal(true)}>
+                <Cog className="h-4 w-4 mr-2" />
+                Access Rules Engine
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
@@ -153,18 +178,63 @@ export default function SettingsPage() {
                   <Send className="h-10 w-10 text-muted-foreground mb-4" />
                 </div>
                 <h3 className="text-lg font-medium text-foreground">API, Connectors & Documentation</h3>
+                <p className="text-sm text-muted-foreground mt-2 mb-4">
+                  Configure integrations, manage API access, and access comprehensive documentation
+                </p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <Button variant="outline">Manage API Keys</Button>
-                <Button variant="outline">Configure Data Connectors</Button>
-                <Button variant="outline">Access Documentation</Button>
-                <Button variant="outline">Setup Regulatory Submissions</Button>
+                <Button variant="outline" onClick={() => setShowApiManagementModal(true)}>
+                  <PlugZap className="h-4 w-4 mr-2" />
+                  Manage API Keys
+                </Button>
+                <Button variant="outline" onClick={() => setShowDataConnectorsModal(true)}>
+                  <Link2 className="h-4 w-4 mr-2" />
+                  Configure Data Connectors
+                </Button>
+                <Button variant="outline" onClick={() => setShowDocumentationModal(true)}>
+                  <BookText className="h-4 w-4 mr-2" />
+                  Access Documentation
+                </Button>
+                <Button variant="outline" onClick={() => setShowRegulatorySubmissionModal(true)}>
+                  <Send className="h-4 w-4 mr-2" />
+                  Setup Regulatory Submissions
+                </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
-
       </Tabs>
+
+      {/* Modals */}
+      <NoCodeRulesBuilderModal 
+        open={showNoCodeRulesModal} 
+        onOpenChange={setShowNoCodeRulesModal} 
+      />
+      
+      <ApiManagementModal 
+        open={showApiManagementModal} 
+        onOpenChange={setShowApiManagementModal} 
+      />
+      
+      <DataConnectorsModal 
+        open={showDataConnectorsModal} 
+        onOpenChange={setShowDataConnectorsModal} 
+      />
+      
+      <DocumentationAccessModal 
+        open={showDocumentationModal} 
+        onOpenChange={setShowDocumentationModal} 
+      />
+      
+      <RegulatorySubmissionModal 
+        open={showRegulatorySubmissionModal} 
+        onOpenChange={setShowRegulatorySubmissionModal} 
+      />
+      
+      <RoleBasedAccessModal 
+        open={showRoleBasedAccessModal} 
+        onOpenChange={setShowRoleBasedAccessModal} 
+      />
     </div>
   );
 }
