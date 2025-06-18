@@ -35,6 +35,8 @@ import {
 } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AIInsightsModal } from "@/components/behavioral-modeling/ai-insights-modal";
+import { AnomalyDetectionModal } from "@/components/behavioral-modeling/anomaly-detection-modal";
+import { SegmentModelsModal } from "@/components/behavioral-modeling/segment-models-modal";
 
 const customerSegmentsData = [
   { segment: "Low Risk Retail", count: 12500, avgTxValue: 75 },
@@ -58,6 +60,8 @@ const chartConfig = {
 export default function BehavioralModelingPage() {
   const [isClient, setIsClient] = useState(false);
   const [showAIInsights, setShowAIInsights] = useState(false);
+  const [showAnomalyDetection, setShowAnomalyDetection] = useState(false);
+  const [showSegmentModels, setShowSegmentModels] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -199,22 +203,26 @@ export default function BehavioralModelingPage() {
               Anomaly Detection Rules
             </CardTitle>
             <CardDescription>
-              Configure and manage rules for identifying unusual behavior
-              patterns. (Feature coming soon)
+              Configure and manage AI-powered rules for identifying unusual behavior
+              patterns with dynamic thresholds and real-time learning.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
               <UserX className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium text-muted-foreground">
-                Behavioral Rule Configuration
+                AI-Native Detection Engine
               </h3>
-              <p className="text-sm text-muted-foreground">
-                Define thresholds, deviations, and sequences that trigger
-                behavioral alerts.
+              <p className="text-sm text-muted-foreground mb-4">
+                Deploy sophisticated anomaly detection with machine learning-powered
+                thresholds and contextual scoring.
               </p>
-              <Button variant="secondary" className="mt-4">
-                Configure Rules
+              <Button 
+                variant="secondary" 
+                onClick={() => setShowAnomalyDetection(true)}
+                className="bg-gradient-to-r from-warning/10 to-destructive/10 border-warning/20 hover:from-warning/20 hover:to-destructive/20"
+              >
+                Configure Detection Rules
               </Button>
             </div>
           </CardContent>
@@ -225,22 +233,26 @@ export default function BehavioralModelingPage() {
               Segment-Specific Models
             </CardTitle>
             <CardDescription>
-              Develop and deploy tailored behavioral models for each customer
-              segment. (Feature coming soon)
+              Deploy and manage tailored AI models for each customer segment with
+              automated retraining and performance optimization.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
               <UserCheck className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium text-muted-foreground">
-                Model Management
+                Intelligent Model Management
               </h3>
-              <p className="text-sm text-muted-foreground">
-                Train, test, and monitor the performance of your behavioral
-                models.
+              <p className="text-sm text-muted-foreground mb-4">
+                Train, deploy, and monitor specialized models for different customer
+                behaviors with A/B testing and canary deployments.
               </p>
-              <Button variant="secondary" className="mt-4">
-                Manage Models
+              <Button 
+                variant="secondary" 
+                onClick={() => setShowSegmentModels(true)}
+                className="bg-gradient-to-r from-success/10 to-primary/10 border-success/20 hover:from-success/20 hover:to-primary/20"
+              >
+                Manage Segment Models
               </Button>
             </div>
           </CardContent>
@@ -250,6 +262,16 @@ export default function BehavioralModelingPage() {
       <AIInsightsModal 
         open={showAIInsights} 
         onOpenChange={setShowAIInsights} 
+      />
+      
+      <AnomalyDetectionModal 
+        open={showAnomalyDetection} 
+        onOpenChange={setShowAnomalyDetection} 
+      />
+      
+      <SegmentModelsModal 
+        open={showSegmentModels} 
+        onOpenChange={setShowSegmentModels} 
       />
     </div>
   );
