@@ -6,9 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { SlidersHorizontal, BotMessageSquare, FileText } from 'lucide-react';
 import { RulesWorkflowModal } from '@/components/compliance/rules-workflow-modal';
+import { AutomatedComplianceEngineModal } from '@/components/compliance/automated-compliance-engine-modal';
+import { AIAssistedInvestigationsModal } from '@/components/compliance/ai-assisted-investigations-modal';
+import { RegulatoryReportingModal } from '@/components/compliance/regulatory-reporting-modal';
 
 export default function ComplianceOperationsCenterPage() {
   const [showRulesModal, setShowRulesModal] = useState(false);
+  const [showAutomatedEngineModal, setShowAutomatedEngineModal] = useState(false);
+  const [showAIInvestigationsModal, setShowAIInvestigationsModal] = useState(false);
+  const [showRegulatoryReportingModal, setShowRegulatoryReportingModal] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">
@@ -31,7 +37,7 @@ export default function ComplianceOperationsCenterPage() {
       </section>
 
       <section className="grid gap-6 md:grid-cols-2">
-        <Card className="shadow-lg">
+        <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer" onClick={() => setShowAutomatedEngineModal(true)}>
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">Automated Compliance Engine</CardTitle>
             <CardDescription>
@@ -42,10 +48,11 @@ export default function ComplianceOperationsCenterPage() {
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
               <SlidersHorizontal className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium text-muted-foreground">Rule & Workflow Configuration</h3>
+              <p className="text-sm text-muted-foreground mt-2">AI-powered automation with 87.5% efficiency</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="shadow-lg">
+        <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer" onClick={() => setShowAIInvestigationsModal(true)}>
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">AI-Assisted Investigations</CardTitle>
             <CardDescription>
@@ -56,12 +63,13 @@ export default function ComplianceOperationsCenterPage() {
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
               <BotMessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium text-muted-foreground">AI Agents & Narrative Generation</h3>
+              <p className="text-sm text-muted-foreground mt-2">94.2% accuracy with intelligent case analysis</p>
             </div>
           </CardContent>
         </Card>
       </section>
       <section>
-        <Card className="shadow-lg">
+        <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer" onClick={() => setShowRegulatoryReportingModal(true)}>
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">Regulatory Reporting</CardTitle>
             <CardDescription>
@@ -72,6 +80,7 @@ export default function ComplianceOperationsCenterPage() {
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center">
               <FileText className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium text-muted-foreground">Automated Filings & Audit Trails</h3>
+              <p className="text-sm text-muted-foreground mt-2">98.5% on-time submissions with full automation</p>
             </div>
           </CardContent>
         </Card>
@@ -80,6 +89,21 @@ export default function ComplianceOperationsCenterPage() {
       <RulesWorkflowModal 
         open={showRulesModal} 
         onOpenChange={setShowRulesModal} 
+      />
+      
+      <AutomatedComplianceEngineModal 
+        open={showAutomatedEngineModal} 
+        onOpenChange={setShowAutomatedEngineModal} 
+      />
+      
+      <AIAssistedInvestigationsModal 
+        open={showAIInvestigationsModal} 
+        onOpenChange={setShowAIInvestigationsModal} 
+      />
+      
+      <RegulatoryReportingModal 
+        open={showRegulatoryReportingModal} 
+        onOpenChange={setShowRegulatoryReportingModal} 
       />
     </div>
   );
