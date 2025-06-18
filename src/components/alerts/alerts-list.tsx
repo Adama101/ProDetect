@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from '../ui/separator';
+import { CaseInvestigationModal } from '@/components/compliance/case-investigation-modal';
 
 type AlertSeverity = 'Critical' | 'High' | 'Medium' | 'Low';
 type AlertStatus = 'Open' | 'In Review' | 'Resolved' | 'Closed'; // Overall status of the alert notification
@@ -75,11 +76,18 @@ const caseStatusConfig: Record<CaseStatus, { colorClass: string, icon?: React.El
 export function AlertsList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [severityFilter, setSeverityFilter] = useState<AlertSeverity[]>([]);
+  const [selectedAlert, setSelectedAlert] = useState<AlertItem | null>(null);
+  const [showInvestigationModal, setShowInvestigationModal] = useState(false);
 
   const toggleSeverityFilter = (severity: AlertSeverity) => {
     setSeverityFilter(prev => 
       prev.includes(severity) ? prev.filter(s => s !== severity) : [...prev, severity]
     );
+  };
+
+  const handleInvestigateCase = (alert: AlertItem) => {
+    setSelectedAlert(alert);
+    setShowInvestigationModal(true);
   };
 
   const filteredAlerts = mockAlerts.filter(alert => {
@@ -191,7 +199,14 @@ export function AlertsList() {
               </CardContent>
               <Separator className="my-3" />
               <div className="p-4 pt-0">
-                 <Button variant="outline" size="sm" className="w-full">Investigate Case</Button>
+                 <Button 
+                   variant="outline" 
+                   size="sm" 
+                   className="w-full bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300"
+                   onClick={() => handleInvestigateCase(alert)}
+                 >
+                   Investigate Case
+                 </Button>
               </div>
             </Card>
           );
@@ -202,6 +217,12 @@ export function AlertsList() {
           No alerts match your current filters.
         </div>
       )}
+
+      <CaseInvestigationModal 
+        open={showInvestigationModal} 
+        onOpenChange={setShowInvestigationModal}
+        alert={selectedAlert}
+      />
     </div>
   );
 }
