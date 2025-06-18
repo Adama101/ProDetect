@@ -148,31 +148,27 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           <SidebarMenu className="space-y-1">
             {navItems.map((item) => (
               <SidebarMenuItem key={item.label} className="py-1">
-                <Link href={item.href}>
-                  <SidebarMenuButton
-                    tooltip={item.tooltip}
-                    asChild
-                    className="h-10"
-                  >
-                    <a className="flex items-center gap-3 px-4">
-                      <item.icon className="h-5 w-5" />
-                      <span className="text-base">{item.label}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </Link>
+                <SidebarMenuButton
+                  tooltip={item.tooltip}
+                  asChild
+                  className="h-10"
+                >
+                  <Link href={item.href} className="flex items-center gap-3 px-4">
+                    <item.icon className="h-5 w-5" />
+                    <span className="text-base">{item.label}</span>
+                  </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-4">
-          <Link href="/settings">
-            <SidebarMenuButton tooltip="Settings" asChild>
-              <a className="flex items-center gap-3 px-4">
-                <Settings className="h-5 w-5" />
-                <span className="text-base">Settings</span>
-              </a>
-            </SidebarMenuButton>
-          </Link>
+          <SidebarMenuButton tooltip="Settings" asChild>
+            <Link href="/settings" className="flex items-center gap-3 px-4">
+              <Settings className="h-5 w-5" />
+              <span className="text-base">Settings</span>
+            </Link>
+          </SidebarMenuButton>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>

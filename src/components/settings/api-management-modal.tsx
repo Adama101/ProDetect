@@ -75,6 +75,7 @@ import {
   Wrench,
   Sliders,
   Calendar,
+  ExternalLink,
 } from "lucide-react";
 
 interface ApiManagementModalProps {
@@ -862,7 +863,7 @@ export function ApiManagementModal({ open, onOpenChange }: ApiManagementModalPro
                 <CardContent>
                   <div className="h-48 flex items-center justify-center border-2 border-dashed border-border rounded-lg">
                     <div className="text-center">
-                      <PieChart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                       <p className="text-muted-foreground">Response time distribution chart</p>
                     </div>
                   </div>
