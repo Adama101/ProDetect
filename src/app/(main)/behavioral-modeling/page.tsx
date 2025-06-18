@@ -34,6 +34,7 @@ import {
   Legend,
 } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AIInsightsModal } from "@/components/behavioral-modeling/ai-insights-modal";
 
 const customerSegmentsData = [
   { segment: "Low Risk Retail", count: 12500, avgTxValue: 75 },
@@ -56,6 +57,7 @@ const chartConfig = {
 
 export default function BehavioralModelingPage() {
   const [isClient, setIsClient] = useState(false);
+  const [showAIInsights, setShowAIInsights] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -69,7 +71,11 @@ export default function BehavioralModelingPage() {
             Behavioral Modeling & Segmentation
           </h1>
         </div>
-        <Button variant="outline">
+        <Button 
+          variant="outline" 
+          onClick={() => setShowAIInsights(true)}
+          className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300"
+        >
           <Bot className="mr-2 h-4 w-4" />
           AI-Powered Insights
         </Button>
@@ -240,6 +246,11 @@ export default function BehavioralModelingPage() {
           </CardContent>
         </Card>
       </section>
+
+      <AIInsightsModal 
+        open={showAIInsights} 
+        onOpenChange={setShowAIInsights} 
+      />
     </div>
   );
 }
