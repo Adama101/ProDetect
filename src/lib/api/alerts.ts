@@ -66,7 +66,7 @@ export class AlertService {
              u.first_name || ' ' || u.last_name as assignee_name
       FROM alerts a
       LEFT JOIN customers c ON a.customer_id = c.id
-      LEFT JOIN users u ON a.assigned_to::uuid = u.id
+      LEFT JOIN users u ON a.assigned_to = u.id
       WHERE 1=1
     `;
     const params: any[] = [];
