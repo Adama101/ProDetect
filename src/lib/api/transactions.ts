@@ -1,4 +1,5 @@
 import { db, PaginationOptions, PaginatedResult, buildPaginationQuery } from '@/lib/database/connection';
+import { tazamaService } from '@/lib/tazama/service';
 
 export interface Transaction {
   id: string;
@@ -202,8 +203,14 @@ export class TransactionService {
     const result = await db.query<Transaction>(query, params);
     const transaction = result[0];
 
-    // Process transaction through rules engine
-    await this.processTransactionRules(transaction);
+    // Process transaction through Tazama rules engine
+    try {
+      await tazamaService.processTransaction(transaction.id);
+    } catch (error) {
+      console.error('Error processing transaction through Tazama:', error);
+      // Continue with traditional rule processing as fallback
+      await this.processTransactionRules(transaction);
+    }
 
     return transaction;
   }
