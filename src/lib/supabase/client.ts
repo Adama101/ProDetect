@@ -7,8 +7,6 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const hasValidCredentials = 
   supabaseUrl && 
   supabaseAnonKey && 
-  !supabaseUrl.includes('your-supabase-url') && 
-  !supabaseAnonKey.includes('your-supabase-anon-key') &&
   supabaseUrl.startsWith('https://');
 
 if (!hasValidCredentials) {
