@@ -8,6 +8,7 @@ import { TrendingUp, ShieldCheck, FileText, BarChart3, Clock, CheckCircle, Calen
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState('reports');
