@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { TransactionDetailsModal } from "@/components/transaction-monitoring/transaction-details-modal";
 
 interface Transaction {
   id: string;
@@ -136,6 +137,8 @@ export default function TransactionMonitoringPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({});
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Simulate API call
@@ -181,6 +184,11 @@ export default function TransactionMonitoringPage() {
     (sum, t) => sum + (t.currency === "USD" ? t.amount : t.amount * 1.1),
     0
   ); // Simplified conversion
+
+  const handleViewTransaction = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -375,7 +383,11 @@ export default function TransactionMonitoringPage() {
                     {tx.alerts.join(", ") || "None"}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon">
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => handleViewTransaction(tx)}
+                    >
                       <Eye className="h-4 w-4" />
                       <span className="sr-only">View Details</span>
                     </Button>
@@ -396,6 +408,30 @@ export default function TransactionMonitoringPage() {
           </Table>
         </CardContent>
       </Card>
+
+      <TransactionDetailsModal 
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        transaction={selectedTransaction ? {
+          id: selectedTransaction.id,
+          transaction_id: selectedTransaction.id,
+          customer_id: selectedTransaction.sourceAccount,
+          amount: selectedTransaction.amount,
+          currency: selectedTransaction.currency,
+          type: selectedTransaction.type,
+          status: selectedTransaction.status,
+          counterparty: selectedTransaction.destinationAccount,
+          risk: selectedTransaction.riskScore ? 
+            (selectedTransaction.riskScore > 80 ? "Critical" : 
+             selectedTransaction.riskScore > 60 ? "High" : 
+             selectedTransaction.riskScore > 40 ? "Medium" : "Low") : "Medium",
+          date: format(selectedTransaction.timestamp, "yyyy-MM-dd"),
+          time: format(selectedTransaction.timestamp, "HH:mm:ss"),
+          description: selectedTransaction.alerts.length > 0 ? selectedTransaction.alerts[0] : "Transaction",
+          riskScore: selectedTransaction.riskScore,
+          riskFactors: selectedTransaction.alerts,
+        } : null}
+      />
     </div>
   );
 }
