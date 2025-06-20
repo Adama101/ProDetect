@@ -240,24 +240,24 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 >
                   <li>
                     <Link href="/profile">
-                      <a
+                      <div
                         className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
                         Profile
-                      </a>
+                      </div>
                     </Link>
                   </li>
                   <li>
                     <Link href="/settings">
-                      <a
+                      <div
                         className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
                         Settings
-                      </a>
+                      </div>
                     </Link>
                   </li>
                   <li>
