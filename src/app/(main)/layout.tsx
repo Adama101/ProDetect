@@ -13,6 +13,8 @@ import {
   Wallet2,
   Moon,
   Sun,
+  LogOut,
+  User,
 } from "lucide-react";
 import {
   SidebarProvider,
@@ -28,8 +30,10 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ProDetectLogo } from "@/components/icons/logo";
+import { ProDetectLogo } from '@/components/icons/logo';
 import { Toaster } from "@/components/ui/toaster";
+import { useAuth } from "@/lib/auth/auth-provider";
+import { useRouter } from "next/navigation";
 
 interface NavItem {
   href: string;
@@ -86,6 +90,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const [notificationsCount, setNotificationsCount] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { user, profile, signOut } = useAuth();
+  const router = useRouter();
 
   // Ref for dropdown menu
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -136,6 +142,26 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     item.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      // Redirect is handled in the auth provider
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+  // Get user initials for avatar fallback
+  const getUserInitials = () => {
+    if (profile) {
+      return `${profile.first_name?.[0] || ''}${profile.last_name?.[0] || ''}`.toUpperCase();
+    } else if (user) {
+      const nameParts = user.email?.split('@')[0].split(/[._-]/) || [];
+      return nameParts.map(part => part[0]?.toUpperCase() || '').join('').substring(0, 2);
+    }
+    return 'PD';
+  };
+
   return (
     <SidebarProvider defaultOpen>
       <Sidebar>
@@ -146,7 +172,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu className="space-y-1">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <SidebarMenuItem key={item.label} className="py-1">
                 <SidebarMenuButton
                   tooltip={item.tooltip}
@@ -172,7 +198,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className=" top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-6 backdrop-blur-md">
+        <header className="top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-6 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <SidebarTrigger
               onClick={() => setSidebarOpen((open) => !open)}
@@ -225,26 +251,31 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               >
                 <Avatar className="h-9 w-9">
                   <AvatarImage
-                    src="https://picsum.photos/seed/user/40/40"
-                    alt="User Avatar"
+                    src={profile?.avatar_url || undefined}
+                    alt={profile?.first_name ? `${profile.first_name} ${profile.last_name}` : "User Avatar"}
                     data-ai-hint="user avatar"
                   />
-                  <AvatarFallback>PD</AvatarFallback>
+                  <AvatarFallback>{getUserInitials()}</AvatarFallback>
                 </Avatar>
               </button>
               {userMenuOpen && (
                 <ul
-                  className="absolute right-0 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg dark:bg-gray-800 dark:border-gray-700"
+                  className="absolute right-0 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg dark:bg-gray-800 dark:border-gray-700 z-50"
                   role="menu"
                   aria-label="User menu"
                 >
+                  <li className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                    <div className="text-sm font-medium">{profile?.first_name} {profile?.last_name}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</div>
+                  </li>
                   <li>
                     <Link href="/profile">
                       <div
-                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
+                        <User className="h-4 w-4" />
                         Profile
                       </div>
                     </Link>
@@ -252,10 +283,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                   <li>
                     <Link href="/settings">
                       <div
-                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
+                        <Settings className="h-4 w-4" />
                         Settings
                       </div>
                     </Link>
@@ -264,11 +296,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     <button
                       onClick={() => {
                         setUserMenuOpen(false);
-                        alert("Logging out...");
+                        handleLogout();
                       }}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 dark:text-red-400"
                       role="menuitem"
                     >
+                      <LogOut className="h-4 w-4" />
                       Logout
                     </button>
                   </li>
