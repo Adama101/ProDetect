@@ -134,7 +134,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     const isAuthRoute = pathname?.startsWith('/(auth)') || 
                         pathname === '/login' || 
-                        pathname === '/register';
+                        pathname === '/register' ||
+                        pathname === '/forgot-password' ||
+                        pathname === '/reset-password';
     
     if (!user && !isAuthRoute && pathname !== '/') {
       router.push('/login');
