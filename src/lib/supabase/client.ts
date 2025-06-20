@@ -3,8 +3,19 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials not found. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.');
+// Check if we have valid Supabase credentials
+const hasValidCredentials = 
+  supabaseUrl && 
+  supabaseAnonKey && 
+  supabaseUrl !== 'your-supabase-url' && 
+  supabaseAnonKey !== 'your-supabase-anon-key' &&
+  supabaseUrl.startsWith('https://');
+
+if (!hasValidCredentials) {
+  console.warn('Supabase credentials not found or invalid. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables with valid values.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Create a mock client or real client based on credential validity
+export const supabase = hasValidCredentials 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : createClient('https://placeholder.supabase.co', 'placeholder-key');
