@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { GenerateReportCard } from '@/components/reports/generate-report-card';
 import { ReportMetricCard } from '@/components/reports/report-metric-card';
 import { RecentReportsTable } from '@/components/reports/recent-reports-table';
-import { TrendingUp, ShieldCheck, FileText, BarChart3, Clock, CheckCircle, Calendar, AlertTriangle } from 'lucide-react';
+import { TrendingUp, ShieldCheck, FileText, BarChart3, Clock, CheckCircle, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';

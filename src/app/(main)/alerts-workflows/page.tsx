@@ -40,9 +40,6 @@ export default function ComplianceOperationsCenterPage() {
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer" onClick={() => setShowAutomatedEngineModal(true)}>
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">Automated Compliance Engine</CardTitle>
-            <CardDescription>
-              Configure no-code, dynamic risk-based rules, automate task assignments, and manage policy enforcement.
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center bg-gradient-to-r hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
@@ -55,9 +52,6 @@ export default function ComplianceOperationsCenterPage() {
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer" onClick={() => setShowAIInvestigationsModal(true)}>
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">AI-Assisted Investigations</CardTitle>
-            <CardDescription>
-              Enhance case management with AI-driven insights and automation. (Features rolling out)
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center bg-gradient-to-r hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
@@ -72,9 +66,6 @@ export default function ComplianceOperationsCenterPage() {
         <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer " onClick={() => setShowRegulatoryReportingModal(true)}>
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-foreground">Regulatory Reporting</CardTitle>
-            <CardDescription>
-              Utilize integrated reporting tools to streamline SAR/STR filings and maintain comprehensive, audit-ready compliance records. (Automation features rolling out)
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-lg p-8 text-center bg-gradient-to-r hover:from-primary/20 hover:to-accent/20 transition-all duration-300">

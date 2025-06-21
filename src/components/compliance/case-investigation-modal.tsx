@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
@@ -33,16 +32,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Search,
   FileText,
   Clock,
   User,
-  DollarSign,
   MapPin,
-  Calendar,
-  Phone,
-  Mail,
-  Building,
   CreditCard,
   AlertTriangle,
   CheckCircle,
@@ -51,7 +44,6 @@ import {
   Download,
   Upload,
   Plus,
-  Edit,
   Save,
   Send,
   MessageSquare,
@@ -64,34 +56,15 @@ import {
   TrendingDown,
   BarChart3,
   PieChart,
-  LineChart,
   Globe,
   Smartphone,
-  Laptop,
-  Monitor,
-  Wifi,
   Lock,
-  Unlock,
-  Key,
   Database,
-  Network,
   Brain,
   Zap,
   Star,
-  ThumbsUp,
-  ThumbsDown,
-  ArrowRight,
   ExternalLink,
-  Copy,
   Filter,
-  SortAsc,
-  MoreHorizontal,
-  UserCheck,
-  UserX,
-  Briefcase,
-  Home,
-  Car,
-  Plane,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -101,13 +74,9 @@ import {
 } from "@/components/ui/chart";
 import {
   ResponsiveContainer,
-  LineChart as RechartsLineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
-  AreaChart,
-  Area,
   BarChart,
   Bar,
   PieChart as RechartsPieChart,
@@ -243,9 +212,6 @@ export function CaseInvestigationModal({ open, onOpenChange, alert }: CaseInvest
                 <Shield className="h-6 w-6 text-primary" />
                 Case Investigation: {alert.id}
               </DialogTitle>
-              <DialogDescription className="mt-2">
-                Comprehensive investigation dashboard for compliance case management
-              </DialogDescription>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant={alert.severity === "Critical" ? "destructive" : alert.severity === "High" ? "warning" : "secondary"}>

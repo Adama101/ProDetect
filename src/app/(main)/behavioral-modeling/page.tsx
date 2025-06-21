@@ -39,11 +39,11 @@ import { AnomalyDetectionModal } from "@/components/behavioral-modeling/anomaly-
 import { SegmentModelsModal } from "@/components/behavioral-modeling/segment-models-modal";
 
 const customerSegmentsData = [
-  { segment: "Low Risk Retail", count: 12500, avgTxValue: 75 },
-  { segment: "High Net Worth", count: 850, avgTxValue: 15000 },
-  { segment: "MSBs", count: 300, avgTxValue: 5000 },
-  { segment: "Online Gamers", count: 5600, avgTxValue: 30 },
-  { segment: "International Students", count: 1200, avgTxValue: 250 },
+  { segment: "Low Risk Retail", count: 120, avgTxValue: 75 },
+  { segment: "High Net Worth", count: 850, avgTxValue: 100 },
+  { segment: "MSBs", count: 300, avgTxValue: 500 },
+  { segment: "Online Gamers", count: 500, avgTxValue: 30 },
+  { segment: "International Students", count: 120, avgTxValue: 250 },
 ];
 
 const chartConfig = {
@@ -110,7 +110,7 @@ export default function BehavioralModelingPage() {
             <Activity className="h-5 w-5 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">17</div>
+            <div className="text-3xl font-bold text-foreground">1</div>
             <p className="text-xs text-muted-foreground mt-1">
               +3 from yesterday
             </p>

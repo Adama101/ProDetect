@@ -22,8 +22,6 @@ import {
   Users,
   Target,
   Zap,
-  Shield,
-  DollarSign,
   Clock,
   MapPin,
   CreditCard,
@@ -35,7 +33,6 @@ import {
   Activity,
   Eye,
   CheckCircle,
-  XCircle,
   ArrowRight,
   Lightbulb,
   Star,
@@ -48,8 +45,6 @@ import {
 } from "@/components/ui/chart";
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -60,8 +55,6 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
-  ScatterChart,
-  Scatter,
   Cell,
   PieChart as RechartsPieChart,
   Pie,
@@ -83,11 +76,11 @@ const behavioralTrends = [
 ];
 
 const segmentRiskProfile = [
-  { segment: "Digital Natives", risk: 85, volume: 45, growth: 12 },
-  { segment: "Traditional Users", risk: 25, volume: 30, growth: -5 },
-  { segment: "High-Value Clients", risk: 60, volume: 15, growth: 8 },
-  { segment: "Emerging Markets", risk: 75, volume: 35, growth: 25 },
-  { segment: "Corporate Accounts", risk: 40, volume: 20, growth: 3 },
+  { segment: "Digital Natives", risk: 5, volume: 45, growth: 12 },
+  { segment: "Traditional Users", risk: 5, volume: 30, growth: -5 },
+  { segment: "High-Value Clients", risk: 10, volume: 15, growth: 8 },
+  { segment: "Emerging Markets", risk: 5, volume: 35, growth: 25 },
+  { segment: "Corporate Accounts", risk: 0, volume: 20, growth: 3 },
 ];
 
 const anomalyPatterns = [

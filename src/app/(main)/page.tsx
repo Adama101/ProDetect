@@ -59,9 +59,9 @@ export default function DashboardPage() {
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <RiskScoreCard
           title="Overall Compliance Risk"
-          score="15"
+          score="5"
           trend="up"
-          trendText="+3.5% this month"
+          trendText="+1.5% this month"
           icon={Activity}
           iconColor="text-primary"
         />
@@ -102,7 +102,7 @@ export default function DashboardPage() {
         />
         <RiskScoreCard
           title="Anomalous Behavior Alerts"
-          score="23"
+          score="12"
           trend="neutral"
           trendText="Monitoring active"
           icon={AlertTriangle}

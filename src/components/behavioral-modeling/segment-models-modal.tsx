@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -31,27 +30,18 @@ import {
   Target,
   TrendingUp,
   TrendingDown,
-  Users,
   Smartphone,
-  CreditCard,
-  Globe,
   Building,
   GraduationCap,
   Briefcase,
-  Home,
   Car,
-  Plane,
   ShoppingCart,
-  Gamepad2,
-  Coffee,
   Zap,
   Activity,
   BarChart3,
   PieChart,
   LineChart as LineChartIcon,
-  Settings,
   Play,
-  Pause,
   RotateCcw,
   Save,
   Download,
@@ -60,18 +50,12 @@ import {
   Eye,
   CheckCircle,
   XCircle,
-  AlertTriangle,
   Clock,
-  DollarSign,
-  MapPin,
-  Calendar,
   Cpu,
   Database,
   Network,
   Sparkles,
   Lightbulb,
-  ArrowRight,
-  Filter,
 } from "lucide-react";
 import {
   ChartContainer,
@@ -85,20 +69,14 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  AreaChart,
-  Area,
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
-  ScatterChart,
-  Scatter,
   Cell,
   PieChart as RechartsPieChart,
   Pie,
-  BarChart,
-  Bar,
 } from "recharts";
 
 interface SegmentModelsModalProps {
@@ -142,7 +120,7 @@ const customerSegments = [
     description: "Conservative users preferring branch and phone banking",
     icon: Building,
     color: "text-green-500",
-    customerCount: 32000,
+    customerCount: 320,
     riskLevel: "Low",
     modelAccuracy: 97.8,
     falsePositiveRate: 1.2,
@@ -170,7 +148,7 @@ const customerSegments = [
     description: "Premium clients with complex financial needs",
     icon: Briefcase,
     color: "text-purple-500",
-    customerCount: 8500,
+    customerCount: 80,
     riskLevel: "High",
     modelAccuracy: 91.5,
     falsePositiveRate: 6.2,
@@ -198,7 +176,7 @@ const customerSegments = [
     description: "SME accounts with regular business transactions",
     icon: ShoppingCart,
     color: "text-orange-500",
-    customerCount: 15600,
+    customerCount: 150,
     riskLevel: "Medium",
     modelAccuracy: 89.7,
     falsePositiveRate: 8.1,
@@ -226,7 +204,7 @@ const customerSegments = [
     description: "Students with cross-border financial activity",
     icon: GraduationCap,
     color: "text-indigo-500",
-    customerCount: 12300,
+    customerCount: 100,
     riskLevel: "High",
     modelAccuracy: 86.4,
     falsePositiveRate: 12.3,
@@ -254,7 +232,7 @@ const customerSegments = [
     description: "Freelancers and gig workers with irregular income",
     icon: Car,
     color: "text-yellow-500",
-    customerCount: 28900,
+    customerCount: 200,
     riskLevel: "Medium",
     modelAccuracy: 88.9,
     falsePositiveRate: 9.7,
@@ -343,9 +321,6 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
             <UserCheck className="h-6 w-6 text-primary" />
             Segment-Specific AI Models Management
           </DialogTitle>
-          <DialogDescription>
-            Deploy, monitor, and optimize tailored machine learning models for each customer segment
-          </DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="segments" className="w-full">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,12 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -26,70 +24,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   SlidersHorizontal,
   Zap,
   Brain,
   Target,
   Activity,
   CheckCircle,
-  XCircle,
-  AlertTriangle,
-  Clock,
-  Users,
   DollarSign,
-  Shield,
   Settings,
   Play,
-  Pause,
-  RotateCcw,
   Save,
-  Download,
-  Upload,
   Plus,
   Edit,
   Eye,
-  Trash2,
-  Filter,
-  Search,
   BarChart3,
-  PieChart,
   TrendingUp,
   TrendingDown,
   Sparkles,
   Lightbulb,
-  Code,
-  Database,
-  Network,
   Cpu,
-  Globe,
-  Calendar,
   ArrowRight,
-  Star,
-  ThumbsUp,
-  ThumbsDown,
-  Flag,
-  Bell,
-  Mail,
-  Phone,
-  MessageSquare,
-  FileText,
-  Workflow,
   GitBranch,
-  Timer,
-  Hash,
-  AtSign,
-  Percent,
-  Lock,
-  Unlock,
-  Key,
 } from "lucide-react";
 
 interface AutomatedComplianceEngineModalProps {
@@ -286,9 +241,6 @@ export function AutomatedComplianceEngineModal({ open, onOpenChange }: Automated
             <SlidersHorizontal className="h-6 w-6 text-primary" />
             Automated Compliance Engine
           </DialogTitle>
-          <DialogDescription>
-            Configure, deploy, and monitor AI-powered compliance automation rules and workflows
-          </DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="automation" className="w-full">

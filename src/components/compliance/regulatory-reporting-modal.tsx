@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,13 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Select,
   SelectContent,
@@ -26,11 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -41,13 +32,9 @@ import {
 } from "@/components/ui/table";
 import {
   FileText,
-  Calendar as CalendarIcon,
   Clock,
   CheckCircle,
-  XCircle,
-  AlertTriangle,
   Download,
-  Upload,
   Send,
   Eye,
   Edit,
@@ -55,49 +42,17 @@ import {
   Filter,
   Search,
   BarChart3,
-  PieChart,
   TrendingUp,
   TrendingDown,
   Activity,
-  Shield,
-  Globe,
-  Building,
-  Users,
-  DollarSign,
   Target,
   Zap,
-  Brain,
   Sparkles,
   Settings,
   Save,
-  RotateCcw,
-  Play,
-  Pause,
-  Mail,
-  Phone,
-  MapPin,
-  Database,
-  Network,
-  Cpu,
-  Code,
-  Workflow,
-  Star,
-  ThumbsUp,
-  ThumbsDown,
-  ArrowRight,
-  ExternalLink,
   Copy,
   Lightbulb,
-  Flag,
-  Bell,
-  Lock,
-  Unlock,
-  Key,
-  Hash,
-  AtSign,
-  Percent,
 } from "lucide-react";
-import { format } from "date-fns";
 
 interface RegulatoryReportingModalProps {
   open: boolean;
@@ -259,9 +214,6 @@ export function RegulatoryReportingModal({ open, onOpenChange }: RegulatoryRepor
             <FileText className="h-6 w-6 text-primary" />
             Regulatory Reporting & Compliance
           </DialogTitle>
-          <DialogDescription>
-            Automated regulatory report generation, submission tracking, and compliance management
-          </DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="templates" className="w-full">

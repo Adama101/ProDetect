@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -28,44 +25,28 @@ import {
   SlidersHorizontal,
   Workflow,
   Settings,
-  Zap,
   Target,
   Clock,
   Users,
   AlertTriangle,
   CheckCircle,
-  XCircle,
   Play,
-  Pause,
-  RotateCcw,
   Save,
-  Copy,
   Download,
   Upload,
   Plus,
-  Minus,
-  Filter,
   BarChart3,
   Activity,
   Shield,
   Brain,
-  Code,
-  Database,
-  Network,
-  Cpu,
-  Globe,
-  Calendar,
   ArrowRight,
   Sparkles,
   Lightbulb,
   GitBranch,
   Timer,
-  Mail,
-  MessageSquare,
   FileText,
   Eye,
   Edit,
-  Trash2,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
@@ -209,9 +190,6 @@ export function RulesWorkflowModal({ open, onOpenChange }: RulesWorkflowModalPro
             <SlidersHorizontal className="h-6 w-6 text-primary" />
             Advanced Rules & Workflow Management
           </DialogTitle>
-          <DialogDescription>
-            Configure, automate, and optimize compliance rules and workflows with AI-powered insights
-          </DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="rules" className="w-full">

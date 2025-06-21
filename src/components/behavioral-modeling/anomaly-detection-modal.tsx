@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -39,17 +39,12 @@ import {
   TrendingUp,
   TrendingDown,
   Play,
-  Pause,
   RotateCcw,
   Save,
-  Copy,
   Download,
   Upload,
   Eye,
-  EyeOff,
   Plus,
-  Minus,
-  Filter,
   BarChart3,
   Activity,
   Shield,
@@ -58,12 +53,7 @@ import {
   Lightbulb,
   Code,
   Database,
-  Network,
   Cpu,
-  Globe,
-  Users,
-  Calendar,
-  ArrowRight,
   Sparkles,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
@@ -210,9 +200,6 @@ export function AnomalyDetectionModal({ open, onOpenChange }: AnomalyDetectionMo
             <AlertTriangle className="h-6 w-6 text-warning" />
             AI-Native Anomaly Detection Rules Engine
           </DialogTitle>
-          <DialogDescription>
-            Configure, manage, and optimize behavioral anomaly detection rules with AI-powered insights
-          </DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="rules" className="w-full">
