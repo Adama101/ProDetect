@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { FuzzyMatchForm } from "@/components/fuzzy-matching/fuzzy-match-form";
-import { MatchResultsTable } from "@/components/fuzzy-matching/match-results-table";
+import { FuzzyMatchForm } from "@/components/sanction-screening/fuzzy-match-form";
+import { MatchResultsTable } from "@/components/sanction-screening/match-results-table";
 import { EnhanceMatchingOutput } from "@/ai/flows/enhance-matching";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

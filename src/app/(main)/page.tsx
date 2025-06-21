@@ -59,7 +59,7 @@ export default function DashboardPage() {
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <RiskScoreCard
           title="Overall Compliance Risk"
-          score="65"
+          score="15"
           trend="up"
           trendText="+3.5% this month"
           icon={Activity}

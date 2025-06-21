@@ -157,9 +157,6 @@ export function FuzzyMatchForm({ onResults, onLoadingStateChange }: FuzzyMatchFo
     <Card className="shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-foreground">AI-Powered Fuzzy Matching</CardTitle>
-        <CardDescription>
-          Screen names against watchlists to identify potential matches, even with spelling variations or aliases.
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

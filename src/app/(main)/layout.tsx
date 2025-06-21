@@ -55,7 +55,7 @@ const navItems: NavItem[] = [
     tooltip: "Real-time Monitoring",
   },
   {
-    href: "/fuzzy-matching",
+    href: "/sanction-screening",
     icon: SearchCode,
     label: "Sanction Screening",
     tooltip: "AI Name Screening",
