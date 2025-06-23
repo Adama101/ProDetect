@@ -51,11 +51,11 @@ export default function SettingsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Name</Label>
-                  <Input id="fullName" placeholder="Enter your name" defaultValue="ProDetect User" />
+                  <Input id="fullName" placeholder="Enter your name" defaultValue="" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="Enter your email" defaultValue="user@prodetect.com" />
+                  <Input id="email" type="email" placeholder="Enter your email" defaultValue="" />
                 </div>
               </div>
               <div className="space-y-2">
@@ -129,8 +129,9 @@ export default function SettingsPage() {
                 </Label>
               </div>
               <div className="flex items-center space-x-3 pt-2">
-                <Button variant="outline" onClick={() => setShowRoleBasedAccessModal(true)}>
-                  <Shield className="h-4 w-4 mr-2" />
+                <Button variant="outline" onClick={() => setShowRoleBasedAccessModal(true)}
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
+                  <Shield className="h-4 w-4 mr-2 bg-gradient-to-r from-primary/10 to-accent/10  hover:from-primary/20 hover:to-accent/20 transition-all duration-300" />
                   Manage Role-Based Access
                 </Button>
               </div>
@@ -153,11 +154,13 @@ export default function SettingsPage() {
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                <Button variant="outline" onClick={() => setShowNoCodeRulesModal(true)}>
+                <Button variant="outline" onClick={() => setShowNoCodeRulesModal(true)}
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
                   <Cog className="h-4 w-4 mr-2" />
                   Access Rules Engine
                 </Button>
-                <Button variant="outline" onClick={() => setShowTazamaIntegrationModal(true)}>
+                <Button variant="outline" onClick={() => setShowTazamaIntegrationModal(true)}
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
                   <PlugZap className="h-4 w-4 mr-2" />
                   Tazama Rules Engine
                 </Button>
@@ -184,19 +187,23 @@ export default function SettingsPage() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <Button variant="outline" onClick={() => setShowApiManagementModal(true)}>
+                <Button variant="outline" onClick={() => setShowApiManagementModal(true)}
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
                   <PlugZap className="h-4 w-4 mr-2" />
                   Manage API Keys
                 </Button>
-                <Button variant="outline" onClick={() => setShowDataConnectorsModal(true)}>
+                <Button variant="outline" onClick={() => setShowDataConnectorsModal(true)}
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
                   <Link2 className="h-4 w-4 mr-2" />
                   Configure Data Connectors
                 </Button>
-                <Button variant="outline" onClick={() => setShowDocumentationModal(true)}>
+                <Button variant="outline" onClick={() => setShowDocumentationModal(true)}
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
                   <BookText className="h-4 w-4 mr-2" />
                   Access Documentation
                 </Button>
-                <Button variant="outline" onClick={() => setShowRegulatorySubmissionModal(true)}>
+                <Button variant="outline" onClick={() => setShowRegulatorySubmissionModal(true)}
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300">
                   <Send className="h-4 w-4 mr-2" />
                   Setup Regulatory Submissions
                 </Button>

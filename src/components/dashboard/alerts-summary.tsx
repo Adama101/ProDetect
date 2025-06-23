@@ -52,10 +52,13 @@ export function AlertsSummary() {
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div>
-            <CardTitle className="text-xl font-semibold text-foreground">Key Compliance Activity</CardTitle>
+          <CardTitle className="text-xl font-semibold text-foreground">Key Compliance Activity</CardTitle>
         </div>
         <Link href="/alerts-workflows">
-          <Button variant="outline" size="sm">View All Cases</Button>
+          <Button variant="outline" size="sm"
+            className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300"
+          >
+            View All Cases</Button>
         </Link>
       </CardHeader>
       <CardContent>
@@ -78,16 +81,16 @@ export function AlertsSummary() {
                 <TableRow key={alert.id} className="hover:bg-muted/50 transition-colors">
                   <TableCell>
                     <Badge variant={config.badgeVariant} className="flex items-center gap-1 w-fit">
-                      <SeverityIcon className={`h-3.5 w-3.5 ${config.badgeVariant === 'destructive' || config.badgeVariant === 'warning' ? '' : config.colorClass }`} />
+                      <SeverityIcon className={`h-3.5 w-3.5 ${config.badgeVariant === 'destructive' || config.badgeVariant === 'warning' ? '' : config.colorClass}`} />
                       {alert.severity}
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">{alert.description}</TableCell>
                   <TableCell>
-                     <Badge variant="outline" className="flex items-center gap-1 w-fit font-normal">
-                        <SourceIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                        {alert.source}
-                     </Badge>
+                    <Badge variant="outline" className="flex items-center gap-1 w-fit font-normal">
+                      <SourceIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                      {alert.source}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-muted-foreground">{alert.entity}</TableCell>
                   <TableCell className="text-right text-muted-foreground">{alert.date}</TableCell>

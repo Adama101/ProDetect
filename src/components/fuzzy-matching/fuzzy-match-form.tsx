@@ -31,7 +31,7 @@ interface FuzzyMatchFormProps {
 // Sample watchlist data for different databases
 const sampleWatchlists = {
   internal: [
-    "John Doe", "Johnny Doe", "J. Doe", "Jon Doe",
+    "John Trump", "Johnny Trump", "J. Trump", "Jon Trump",
     "Ahmed Hassan", "A. Hassan", "Hassan Ahmed",
     "Suspicious Entity Corp", "SE Corp", "Suspicious Corp"
   ],

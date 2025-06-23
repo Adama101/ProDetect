@@ -45,7 +45,6 @@ export default function LoginPage() {
     <div className="container flex h-screen w-full flex-col items-center justify-center bg-black text-white">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col items-center space-y-2 text-center">
-          <ProDetectLogo className="h-20 w-auto" />
           <h1 className="text-2xl font-semibold tracking-tight text-white">Welcome back</h1>
           <p className="text-sm text-gray-400">
             Enter your credentials to access your account

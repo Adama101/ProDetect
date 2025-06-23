@@ -250,5 +250,4 @@ export class TazamaService {
   }
 }
 
-// Export singleton instance
 export const tazamaService = new TazamaService();

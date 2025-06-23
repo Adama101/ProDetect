@@ -5,7 +5,7 @@ export function ProDetectLogo(props: SVGProps<SVGSVGElement>) {
     <svg
       width="250"
       height="120"
-      viewBox="0 100 550 200"
+      viewBox="-80 100 550 200"
       fill="white"
       xmlns="http://www.w3.org/2000/svg"
       aria-label="ProDetect Logo"

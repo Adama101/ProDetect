@@ -355,11 +355,10 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-4">
                 {customerSegments.map((segment) => (
-                  <Card 
-                    key={segment.id} 
-                    className={`cursor-pointer transition-all ${
-                      selectedSegment.id === segment.id ? 'ring-2 ring-primary' : ''
-                    }`}
+                  <Card
+                    key={segment.id}
+                    className={`cursor-pointer transition-all ${selectedSegment.id === segment.id ? 'ring-2 ring-primary' : ''
+                      }`}
                     onClick={() => setSelectedSegment(segment)}
                   >
                     <CardContent className="p-4">
@@ -376,8 +375,8 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                                   segment.riskLevel === "High"
                                     ? "destructive"
                                     : segment.riskLevel === "Medium"
-                                    ? "warning"
-                                    : "outline"
+                                      ? "warning"
+                                      : "outline"
                                 }
                               >
                                 {segment.riskLevel} Risk
@@ -631,7 +630,7 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                     <Lightbulb className="h-4 w-4" />
                     AI Optimization Recommendations
                   </h4>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Card className="p-4 bg-primary/5 border-primary/20">
                       <div className="flex items-start gap-3">
@@ -907,19 +906,19 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                     <span className="text-sm text-muted-foreground">23%</span>
                   </div>
                   <Progress value={23} className="h-2" />
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Memory Usage</span>
                     <span className="text-sm text-muted-foreground">67%</span>
                   </div>
                   <Progress value={67} className="h-2" />
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm">GPU Utilization</span>
                     <span className="text-sm text-muted-foreground">45%</span>
                   </div>
                   <Progress value={45} className="h-2" />
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Requests/sec</span>
                     <span className="text-sm text-muted-foreground">1,247</span>
@@ -944,7 +943,7 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                     </div>
                     <Badge variant="outline" className="text-success">Active</Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-between p-4 border rounded">
                     <div>
                       <div className="font-medium">Model v2.3.8</div>
@@ -955,7 +954,7 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                       Rollback
                     </Button>
                   </div>
-                  
+
                   <div className="flex items-center justify-between p-4 border rounded">
                     <div>
                       <div className="font-medium">Model v2.3.5</div>
@@ -997,7 +996,7 @@ export function SegmentModelsModal({ open, onOpenChange }: SegmentModelsModalPro
                       <Progress value={30} className="h-2" />
                     </div>
                   </div>
-                  
+
                   <div className="p-4 border rounded">
                     <h4 className="font-medium mb-2">Test Results</h4>
                     <div className="space-y-2 text-sm">

@@ -16,7 +16,7 @@ export function useTazamaHealth(options?: UseTazamaOptions) {
     try {
       setIsLoading(true);
       setError(null);
-      
+      // This is the System Health Checker
       const response = await fetch('/api/tazama/health');
       
       if (!response.ok) {
@@ -64,7 +64,7 @@ export function useProcessTransaction(options?: UseTazamaOptions) {
     try {
       setIsLoading(true);
       setError(null);
-      
+      // This is the Transaction Processing End-Point
       const response = await fetch('/api/tazama/process-transaction', {
         method: 'POST',
         headers: {
@@ -88,7 +88,7 @@ export function useProcessTransaction(options?: UseTazamaOptions) {
       
       toast({
         title: 'Transaction Processed',
-        description: 'Transaction has been successfully processed through Tazama.',
+        description: 'Transaction has been successfully processed through ProDetect (Tazama).',
       });
       
       return result.data;
@@ -127,7 +127,7 @@ export function useBatchProcessTransactions(options?: UseTazamaOptions) {
     try {
       setIsLoading(true);
       setError(null);
-      
+      // This is the System Batch Processor
       const response = await fetch('/api/tazama/batch-process', {
         method: 'POST',
         headers: {
@@ -189,7 +189,7 @@ export function useSyncCustomer(options?: UseTazamaOptions) {
     try {
       setIsLoading(true);
       setError(null);
-      
+      // This is the Sync Customer End-Point
       const response = await fetch('/api/tazama/sync-customer', {
         method: 'POST',
         headers: {
@@ -249,7 +249,7 @@ export function useBatchSyncCustomers(options?: UseTazamaOptions) {
     try {
       setIsLoading(true);
       setError(null);
-      
+      // This is the Batch-Sync Customer End-Point
       const response = await fetch('/api/tazama/batch-sync-customers', {
         method: 'POST',
         headers: {

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { ProDetectLogo } from '@/components/icons/logo';
 import Image from 'next/image';
-import widget from '../public/auth-widgets.png'; // Ensure image is in /public
+import widget from '../public/auth-widgets.png';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
     return (
@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
                         src={widget}
                         alt="ProDetect preview"
                         className="rounded-lg"
-                        width={700}
+                        width={800}
                         height={800}
                         priority
                     />

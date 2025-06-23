@@ -97,7 +97,6 @@ export default function RegisterPage() {
     <div className="container flex h-full min-h-screen w-full flex-col items-center justify-center py-12 bg-black text-white">
       <div className="mx-auto w-full max-w-3xl space-y-6">
         <div className="flex flex-col items-center text-center">
-          <ProDetectLogo className="h-20 w-auto mb-4" />
           <h1 className="text-2xl font-semibold tracking-tight text-white">Create an account</h1>
           <p className="text-sm text-gray-400">
             Enter your details below to create your account

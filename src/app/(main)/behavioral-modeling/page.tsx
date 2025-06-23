@@ -39,11 +39,11 @@ import { AnomalyDetectionModal } from "@/components/behavioral-modeling/anomaly-
 import { SegmentModelsModal } from "@/components/behavioral-modeling/segment-models-modal";
 
 const customerSegmentsData = [
-  { segment: "Low Risk Retail", count: 120, avgTxValue: 75 },
-  { segment: "High Net Worth", count: 850, avgTxValue: 100 },
-  { segment: "MSBs", count: 300, avgTxValue: 500 },
-  { segment: "Online Gamers", count: 500, avgTxValue: 30 },
-  { segment: "International Students", count: 120, avgTxValue: 250 },
+  { segment: "Low Risk Retail", count: 1, avgTxValue: 2 },
+  { segment: "High Net Worth", count: 2, avgTxValue: 1 },
+  { segment: "MSBs", count: 3, avgTxValue: 5 },
+  { segment: "Online Gamers", count: 1, avgTxValue: 1 },
+  { segment: "International Students", count: 1, avgTxValue: 3 },
 ];
 
 const chartConfig = {
@@ -75,8 +75,8 @@ export default function BehavioralModelingPage() {
             Behavioral Modeling & Segmentation
           </h1>
         </div>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => setShowAIInsights(true)}
           className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300"
         >
@@ -213,11 +213,11 @@ export default function BehavioralModelingPage() {
               <h3 className="text-lg font-medium text-muted-foreground">
                 AI-Native Detection Engine
               </h3>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setShowAnomalyDetection(true)}
                 className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300"
-                >
+              >
                 Configure Detection Rules
               </Button>
             </div>
@@ -239,11 +239,11 @@ export default function BehavioralModelingPage() {
               <h3 className="text-lg font-medium text-muted-foreground">
                 Intelligent Model Management
               </h3>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setShowSegmentModels(true)}
                 className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300"
-                >
+              >
                 Manage Segment Models
               </Button>
             </div>
@@ -251,19 +251,19 @@ export default function BehavioralModelingPage() {
         </Card>
       </section>
 
-      <AIInsightsModal 
-        open={showAIInsights} 
-        onOpenChange={setShowAIInsights} 
+      <AIInsightsModal
+        open={showAIInsights}
+        onOpenChange={setShowAIInsights}
       />
-      
-      <AnomalyDetectionModal 
-        open={showAnomalyDetection} 
-        onOpenChange={setShowAnomalyDetection} 
+
+      <AnomalyDetectionModal
+        open={showAnomalyDetection}
+        onOpenChange={setShowAnomalyDetection}
       />
-      
-      <SegmentModelsModal 
-        open={showSegmentModels} 
-        onOpenChange={setShowSegmentModels} 
+
+      <SegmentModelsModal
+        open={showSegmentModels}
+        onOpenChange={setShowSegmentModels}
       />
     </div>
   );
