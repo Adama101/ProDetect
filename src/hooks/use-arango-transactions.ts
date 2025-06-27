@@ -52,7 +52,7 @@ export function useArangoTransactions(options: UseArangoTransactionsOptions = {}
         throw new Error(result.error || 'Failed to fetch transactions');
       }
       
-      setData(result.data);
+      setData(Array.isArray(result.data) ? result.data : result.data ? [result.data] : []);
       options.onSuccess?.(result.data);
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
@@ -125,7 +125,7 @@ export function useArangoEvaluations(options: {
         throw new Error(result.error || 'Failed to fetch evaluations');
       }
       
-      setData(result.data);
+      setData(Array.isArray(result.data) ? result.data : result.data ? [result.data] : []);
       options.onSuccess?.(result.data);
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));

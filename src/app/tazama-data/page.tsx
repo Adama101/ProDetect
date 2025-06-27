@@ -18,20 +18,30 @@ export default function TazamaDataPage() {
   const [customerId, setCustomerId] = useState('');
   const [limit, setLimit] = useState(20);
   const [activeTab, setActiveTab] = useState('transactions');
+  const [searchParams, setSearchParams] = useState<{
+    id?: string;
+    customerId?: string;
+    limit: number;
+  }>({
+    limit: 20
+  });
   
   const { 
     data: transactions, 
     isLoading: transactionsLoading, 
     error: transactionsError,
     refetch: refetchTransactions
-  } = useArangoTransactions({ limit });
+  } = useArangoTransactions(searchParams);
   
   const {
     data: evaluations,
     isLoading: evaluationsLoading,
     error: evaluationsError,
     refetch: refetchEvaluations
-  } = useArangoEvaluations({ limit });
+  } = useArangoEvaluations({ 
+    limit: searchParams.limit,
+    transactionId: searchParams.id
+  });
   
   const {
     data: stats,
@@ -41,16 +51,29 @@ export default function TazamaDataPage() {
   } = useArangoStats();
 
   const handleSearch = () => {
+    const newParams: {
+      id?: string;
+      customerId?: string;
+      limit: number;
+    } = {
+      limit: limit
+    };
+    
     if (transactionId) {
-      // Fetch specific transaction
-      refetchTransactions();
-    } else if (customerId) {
-      // Fetch transactions for customer
-      refetchTransactions();
-    } else {
-      // Fetch all transactions
-      refetchTransactions();
+      newParams.id = transactionId;
     }
+    
+    if (customerId) {
+      newParams.customerId = customerId;
+    }
+    
+    setSearchParams(newParams);
+  };
+
+  const handleRefreshAll = () => {
+    refetchTransactions();
+    refetchEvaluations();
+    refetchStats();
   };
 
   return (
@@ -64,11 +87,7 @@ export default function TazamaDataPage() {
         </div>
         <Button 
           variant="outline"
-          onClick={() => {
-            refetchTransactions();
-            refetchEvaluations();
-            refetchStats();
-          }}
+          onClick={handleRefreshAll}
           className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20 hover:from-primary/20 hover:to-accent/20 transition-all duration-300"
         >
           <RefreshCw className="mr-2 h-4 w-4" />
@@ -92,6 +111,7 @@ export default function TazamaDataPage() {
             <div className="p-4 text-center text-destructive">
               <AlertTriangle className="h-8 w-8 mx-auto mb-2" />
               <p>Error loading database statistics</p>
+              <p className="text-sm mt-2">{statsError.message}</p>
             </div>
           ) : stats ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -189,6 +209,7 @@ export default function TazamaDataPage() {
                 <div className="p-4 text-center text-destructive">
                   <AlertTriangle className="h-8 w-8 mx-auto mb-2" />
                   <p>Error loading transactions</p>
+                  <p className="text-sm mt-2">{transactionsError.message}</p>
                 </div>
               ) : transactions && transactions.length > 0 ? (
                 <div className="overflow-x-auto">
@@ -207,13 +228,13 @@ export default function TazamaDataPage() {
                     </TableHeader>
                     <TableBody>
                       {transactions.map((transaction, index) => (
-                        <TableRow key={transaction._key || index}>
-                          <TableCell className="font-medium">{transaction._key || transaction.transaction_id}</TableCell>
-                          <TableCell>{transaction.customer_id}</TableCell>
+                        <TableRow key={transaction._key || transaction.transaction_id || index}>
+                          <TableCell className="font-medium">{transaction._key || transaction.transaction_id || `TX-${index}`}</TableCell>
+                          <TableCell>{transaction.customer_id || 'N/A'}</TableCell>
                           <TableCell>
-                            {transaction.amount} {transaction.currency || 'USD'}
+                            {transaction.amount || 0} {transaction.currency || 'USD'}
                           </TableCell>
-                          <TableCell>{transaction.transaction_type}</TableCell>
+                          <TableCell>{transaction.transaction_type || 'Unknown'}</TableCell>
                           <TableCell>
                             <Badge variant={
                               transaction.status === 'completed' ? 'outline' :
@@ -235,12 +256,18 @@ export default function TazamaDataPage() {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            {new Date(transaction.timestamp || transaction.created_at).toLocaleString()}
+                            {transaction.timestamp || transaction.created_at ? 
+                              new Date(transaction.timestamp || transaction.created_at).toLocaleString() : 
+                              'N/A'}
                           </TableCell>
                           <TableCell className="text-right">
                             <Button variant="ghost" size="sm" onClick={() => {
                               setTransactionId(transaction._key || transaction.transaction_id);
-                              handleSearch();
+                              setSearchParams({
+                                id: transaction._key || transaction.transaction_id,
+                                limit: searchParams.limit
+                              });
+                              setActiveTab('evaluations');
                             }}>
                               <Eye className="h-4 w-4" />
                             </Button>
@@ -254,6 +281,7 @@ export default function TazamaDataPage() {
                 <div className="p-4 text-center text-muted-foreground">
                   <Activity className="h-8 w-8 mx-auto mb-2" />
                   <p>No transactions found</p>
+                  <p className="text-sm mt-2">Try adjusting your search criteria or refreshing the data</p>
                 </div>
               )}
             </TabsContent>
@@ -270,6 +298,7 @@ export default function TazamaDataPage() {
                 <div className="p-4 text-center text-destructive">
                   <AlertTriangle className="h-8 w-8 mx-auto mb-2" />
                   <p>Error loading evaluations</p>
+                  <p className="text-sm mt-2">{evaluationsError.message}</p>
                 </div>
               ) : evaluations && evaluations.length > 0 ? (
                 <div className="space-y-4">
@@ -282,7 +311,7 @@ export default function TazamaDataPage() {
                               Evaluation {evaluation._key || index + 1}
                             </CardTitle>
                             <CardDescription>
-                              Transaction: {evaluation.transaction_id}
+                              Transaction: {evaluation.transaction_id || 'Unknown'}
                             </CardDescription>
                           </div>
                           <Badge variant={
@@ -353,7 +382,9 @@ export default function TazamaDataPage() {
                           <div>
                             <Label className="text-sm font-medium">Timestamp</Label>
                             <p className="text-sm">
-                              {new Date(evaluation.timestamp).toLocaleString()}
+                              {evaluation.timestamp ? 
+                                new Date(evaluation.timestamp).toLocaleString() : 
+                                'N/A'}
                             </p>
                           </div>
                         </div>
@@ -365,6 +396,7 @@ export default function TazamaDataPage() {
                 <div className="p-4 text-center text-muted-foreground">
                   <BarChart3 className="h-8 w-8 mx-auto mb-2" />
                   <p>No evaluation results found</p>
+                  <p className="text-sm mt-2">Try selecting a transaction first or adjusting your search criteria</p>
                 </div>
               )}
             </TabsContent>

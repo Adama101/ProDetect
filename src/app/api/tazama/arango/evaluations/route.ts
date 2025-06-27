@@ -21,9 +21,12 @@ export async function GET(request: NextRequest) {
       data = await arangoClient.getAllEvaluationResults(limit);
     }
     
+    // Ensure we always return an array for consistent handling
+    const responseData = Array.isArray(data) ? data : data ? [data] : [];
+    
     return NextResponse.json({
       success: true,
-      data,
+      data: responseData,
     });
   } catch (error) {
     console.error('Error fetching evaluation results from ArangoDB:', error);
