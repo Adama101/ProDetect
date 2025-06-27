@@ -28,6 +28,7 @@ import {
   TrendingDown,
   DollarSign,
   Users,
+  Loader2,
 } from "lucide-react";
 import {
   Select,
@@ -44,135 +45,56 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { TransactionDetailsModal } from "@/components/transaction-monitoring/transaction-details-modal";
-
-interface Transaction {
-  id: string;
-  timestamp: Date;
-  amount: number;
-  currency: string;
-  sourceAccount: string;
-  destinationAccount: string;
-  type: "Credit" | "Debit" | "Transfer";
-  status: "Pending" | "Completed" | "Flagged" | "Blocked";
-  riskScore?: number;
-  alerts: string[];
-}
-
-//Dummy data placeholder
-const mockTransactions: Transaction[] = [
-  {
-    id: "TXN001",
-    timestamp: new Date(Date.now() - 1000 * 60 * 5),
-    amount: 1500.0,
-    currency: "USD",
-    sourceAccount: "ACC12345",
-    destinationAccount: "ACC67890",
-    type: "Transfer",
-    status: "Flagged",
-    riskScore: 85,
-    alerts: ["High value transfer to new beneficiary", "Potential structuring"],
-  },
-  {
-    id: "TXN002",
-    timestamp: new Date(Date.now() - 1000 * 60 * 12),
-    amount: 25.5,
-    currency: "EUR",
-    sourceAccount: "ACC54321",
-    destinationAccount: "MERCHANT001",
-    type: "Debit",
-    status: "Completed",
-    riskScore: 10,
-    alerts: [],
-  },
-  {
-    id: "TXN003",
-    timestamp: new Date(Date.now() - 1000 * 60 * 25),
-    amount: 10000.0,
-    currency: "USD",
-    sourceAccount: "UNKNOWN",
-    destinationAccount: "ACC99999",
-    type: "Credit",
-    status: "Blocked",
-    riskScore: 99,
-    alerts: ["Transaction from sanctioned entity", "High risk source"],
-  },
-  {
-    id: "TXN004",
-    timestamp: new Date(Date.now() - 1000 * 60 * 45),
-    amount: 300.0,
-    currency: "GBP",
-    sourceAccount: "ACC11223",
-    destinationAccount: "ACC44556",
-    type: "Transfer",
-    status: "Pending",
-    riskScore: 45,
-    alerts: ["Awaiting KYC confirmation"],
-  },
-  {
-    id: "TXN005",
-    timestamp: new Date(Date.now() - 1000 * 60 * 62),
-    amount: 50.0,
-    currency: "USD",
-    sourceAccount: "ACC77665",
-    destinationAccount: "GAMINGCO",
-    type: "Debit",
-    status: "Completed",
-    riskScore: 25,
-    alerts: [],
-  },
-];
-
-const statusBadgeVariant = {
-  Pending: "secondary",
-  Completed: "outline",
-  Flagged: "warning",
-  Blocked: "destructive",
-} as const;
+import { useArangoTransactions } from "@/hooks/use-arango-transactions";
+import { ArangoTransaction } from "@/lib/tazama/arango-client";
 
 export default function TransactionMonitoringPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<
-    Transaction[]
-  >([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({});
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [selectedTransaction, setSelectedTransaction] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filteredTransactions, setFilteredTransactions] = useState<ArangoTransaction[]>([]);
+
+  // Fetch transactions from ArangoDB
+  const { transactions, isLoading, error, refetch } = useArangoTransactions({
+    limit: 50,
+    sortBy: 'timestamp',
+    sortOrder: 'DESC',
+  });
 
   useEffect(() => {
-    // Simulate API call
-    setTransactions(mockTransactions);
-    setFilteredTransactions(mockTransactions);
-  }, []);
-
-  useEffect(() => {
-    let currentTransactions = transactions;
+    let currentTransactions = [...transactions];
+    
     if (searchTerm) {
       currentTransactions = currentTransactions.filter(
         (t) =>
-          t.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          t.sourceAccount.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          t.destinationAccount.toLowerCase().includes(searchTerm.toLowerCase())
+          t._id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          t.customer_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          t.transaction_id?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
+    
     if (dateRange.from) {
       currentTransactions = currentTransactions.filter(
-        (t) => t.timestamp >= dateRange.from!
+        (t) => t.timestamp && new Date(t.timestamp) >= dateRange.from!
       );
     }
+    
     if (dateRange.to) {
       const toDate = new Date(dateRange.to);
       toDate.setHours(23, 59, 59, 999); // Include the whole 'to' day
       currentTransactions = currentTransactions.filter(
-        (t) => t.timestamp <= toDate
+        (t) => t.timestamp && new Date(t.timestamp) <= toDate
       );
     }
-    if (statusFilter !== "all") {
+    
+    if (statusFilter !== "all" && statusFilter) {
       currentTransactions = currentTransactions.filter(
         (t) => t.status === statusFilter
       );
     }
+    
     setFilteredTransactions(currentTransactions);
   }, [searchTerm, dateRange, statusFilter, transactions]);
 
@@ -181,13 +103,58 @@ export default function TransactionMonitoringPage() {
     (t) => t.status === "Flagged" || t.status === "Blocked"
   ).length;
   const totalVolume = transactions.reduce(
-    (sum, t) => sum + (t.currency === "USD" ? t.amount : t.amount * 1.1),
+    (sum, t) => sum + (t.amount || 0),
     0
-  ); // Simplified conversion
+  );
 
-  const handleViewTransaction = (transaction: Transaction) => {
-    setSelectedTransaction(transaction);
+  const handleViewTransaction = (transaction: ArangoTransaction) => {
+    // Map ArangoDB transaction to the format expected by the modal
+    const mappedTransaction = {
+      id: transaction._id,
+      transaction_id: transaction.transaction_id || transaction._key,
+      customer_id: transaction.customer_id || 'Unknown',
+      amount: transaction.amount || 0,
+      currency: transaction.currency || 'USD',
+      type: transaction.transaction_type || 'Unknown',
+      status: transaction.status || 'Completed',
+      counterparty: transaction.counterparty?.name || 'Unknown',
+      risk: getRiskLevel(transaction.risk_score),
+      date: transaction.timestamp ? format(new Date(transaction.timestamp), 'yyyy-MM-dd') : 'Unknown',
+      time: transaction.timestamp ? format(new Date(transaction.timestamp), 'HH:mm:ss') : 'Unknown',
+      description: transaction.metadata?.description || 'Transaction',
+      riskScore: transaction.risk_score,
+      riskFactors: transaction.risk_factors || [],
+    };
+    
+    setSelectedTransaction(mappedTransaction);
     setIsModalOpen(true);
+  };
+
+  // Function to determine risk level based on risk score
+  const getRiskLevel = (score?: number): "Low" | "Medium" | "High" | "Critical" => {
+    if (!score) return "Low";
+    if (score > 80) return "Critical";
+    if (score > 60) return "High";
+    if (score > 40) return "Medium";
+    return "Low";
+  };
+
+  // Function to determine badge variant based on status
+  const getStatusBadgeVariant = (status?: string) => {
+    if (!status) return "outline";
+    
+    switch (status) {
+      case "Completed":
+        return "outline";
+      case "Pending":
+        return "secondary";
+      case "Flagged":
+        return "warning";
+      case "Blocked":
+        return "destructive";
+      default:
+        return "outline";
+    }
   };
 
   return (
@@ -210,18 +177,21 @@ export default function TransactionMonitoringPage() {
             <h3 className="text-sm font-medium text-muted-foreground flex items-center">
               <Users className="mr-2 h-4 w-4" /> Total Transactions
             </h3>
-            <p className="text-2xl font-bold">{totalTransactions}</p>
+            <p className="text-2xl font-bold">{isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : totalTransactions}</p>
           </div>
           <div className="p-4 border rounded-lg">
             <h3 className="text-sm font-medium text-muted-foreground flex items-center">
-              <DollarSign className="mr-2 h-4 w-4" /> Total Volume (USD Equiv.)
+              <DollarSign className="mr-2 h-4 w-4" /> Total Volume
             </h3>
             <p className="text-2xl font-bold">
-              $
-              {totalVolume.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {isLoading ? (
+                <Loader2 className="h-6 w-6 animate-spin" />
+              ) : (
+                `$${totalVolume.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}`
+              )}
             </p>
           </div>
           <div className="p-4 border rounded-lg">
@@ -229,7 +199,7 @@ export default function TransactionMonitoringPage() {
               <TrendingUp className="mr-2 h-4 w-4 text-destructive" />{" "}
               Flagged/Blocked
             </h3>
-            <p className="text-2xl font-bold">{flaggedTransactions}</p>
+            <p className="text-2xl font-bold">{isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : flaggedTransactions}</p>
           </div>
           <div className="p-4 border rounded-lg">
             <h3 className="text-sm font-medium text-muted-foreground flex items-center">
@@ -237,15 +207,19 @@ export default function TransactionMonitoringPage() {
               Risk Score
             </h3>
             <p className="text-2xl font-bold">
-              {transactions.length > 0
-                ? (
-                    transactions.reduce(
-                      (sum, t) => sum + (t.riskScore || 0),
-                      0
-                    ) /
-                    transactions.filter((t) => t.riskScore !== undefined).length
-                  ).toFixed(0)
-                : "N/A"}
+              {isLoading ? (
+                <Loader2 className="h-6 w-6 animate-spin" />
+              ) : (
+                transactions.length > 0
+                  ? (
+                      transactions.reduce(
+                        (sum, t) => sum + (t.risk_score || 0),
+                        0
+                      ) /
+                      transactions.filter((t) => t.risk_score !== undefined).length
+                    ).toFixed(0)
+                  : "N/A"
+              )}
               <span className="text-sm">/100</span>
             </p>
           </div>
@@ -326,111 +300,115 @@ export default function TransactionMonitoringPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Timestamp</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Risk</TableHead>
-                <TableHead>Alerts</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredTransactions.map((tx) => (
-                <TableRow
-                  key={tx.id}
-                  className={
-                    tx.status === "Blocked"
-                      ? "bg-destructive/10 hover:bg-destructive/20"
-                      : tx.status === "Flagged"
-                      ? "bg-warning/10 hover:bg-warning/20"
-                      : "hover:bg-muted/50"
-                  }
-                >
-                  <TableCell className="font-medium">{tx.id}</TableCell>
-                  <TableCell>{format(tx.timestamp, "PPpp")}</TableCell>
-                  <TableCell>
-                    {tx.amount.toFixed(2)} {tx.currency}
-                  </TableCell>
-                  <TableCell>{tx.type}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusBadgeVariant[tx.status] || "default"}>
-                      {tx.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {tx.riskScore !== undefined ? (
-                      <Badge
-                        variant={
-                          tx.riskScore > 75
-                            ? "destructive"
-                            : tx.riskScore > 50
-                            ? "warning"
-                            : "outline"
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-2 text-lg">Loading transactions...</span>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12 text-destructive">
+              <p>Error loading transactions: {error.message}</p>
+              <Button onClick={refetch} className="mt-4">
+                Retry
+              </Button>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Timestamp</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Risk</TableHead>
+                  <TableHead>Alerts</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredTransactions.length > 0 ? (
+                  filteredTransactions.map((tx) => {
+                    const riskLevel = getRiskLevel(tx.risk_score);
+                    return (
+                      <TableRow
+                        key={tx._id}
+                        className={
+                          tx.status === "Blocked"
+                            ? "bg-destructive/10 hover:bg-destructive/20"
+                            : tx.status === "Flagged"
+                            ? "bg-warning/10 hover:bg-warning/20"
+                            : "hover:bg-muted/50"
                         }
                       >
-                        {tx.riskScore}
-                      </Badge>
-                    ) : (
-                      <Badge variant="secondary">N/A</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="max-w-xs truncate text-xs">
-                    {tx.alerts.join(", ") || "None"}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      onClick={() => handleViewTransaction(tx)}
+                        <TableCell className="font-medium">{tx.transaction_id || tx._key}</TableCell>
+                        <TableCell>
+                          {tx.timestamp 
+                            ? format(new Date(tx.timestamp), "PPpp") 
+                            : "Unknown"}
+                        </TableCell>
+                        <TableCell>
+                          {tx.amount?.toFixed(2) || "0.00"} {tx.currency || "USD"}
+                        </TableCell>
+                        <TableCell>{tx.transaction_type || "Unknown"}</TableCell>
+                        <TableCell>
+                          <Badge variant={getStatusBadgeVariant(tx.status)}>
+                            {tx.status || "Unknown"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              riskLevel === "Critical"
+                                ? "destructive"
+                                : riskLevel === "High"
+                                ? "warning"
+                                : riskLevel === "Medium"
+                                ? "secondary"
+                                : "outline"
+                            }
+                          >
+                            {riskLevel}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="max-w-xs truncate text-xs">
+                          {tx.risk_factors?.join(", ") || "None"}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={() => handleViewTransaction(tx)}
+                          >
+                            <Eye className="h-4 w-4" />
+                            <span className="sr-only">View Details</span>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={8}
+                      className="text-center text-muted-foreground py-10"
                     >
-                      <Eye className="h-4 w-4" />
-                      <span className="sr-only">View Details</span>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {filteredTransactions.length === 0 && (
-                <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="text-center text-muted-foreground py-10"
-                  >
-                    No transactions match your current filters.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                      {transactions.length === 0 
+                        ? "No transactions found in the database." 
+                        : "No transactions match your current filters."}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
       <TransactionDetailsModal 
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        transaction={selectedTransaction ? {
-          id: selectedTransaction.id,
-          transaction_id: selectedTransaction.id,
-          customer_id: selectedTransaction.sourceAccount,
-          amount: selectedTransaction.amount,
-          currency: selectedTransaction.currency,
-          type: selectedTransaction.type,
-          status: selectedTransaction.status,
-          counterparty: selectedTransaction.destinationAccount,
-          risk: selectedTransaction.riskScore ? 
-            (selectedTransaction.riskScore > 80 ? "Critical" : 
-             selectedTransaction.riskScore > 60 ? "High" : 
-             selectedTransaction.riskScore > 40 ? "Medium" : "Low") : "Medium",
-          date: format(selectedTransaction.timestamp, "yyyy-MM-dd"),
-          time: format(selectedTransaction.timestamp, "HH:mm:ss"),
-          description: selectedTransaction.alerts.length > 0 ? selectedTransaction.alerts[0] : "Transaction",
-          riskScore: selectedTransaction.riskScore,
-          riskFactors: selectedTransaction.alerts,
-        } : null}
+        transaction={selectedTransaction}
       />
     </div>
   );
