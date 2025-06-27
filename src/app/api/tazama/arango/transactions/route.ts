@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { arangoClient } from '@/lib/tazama/arangodb';
+import axios from 'axios';
+
+// ArangoDB connection configuration
+const ARANGO_URL = process.env.ARANGO_URL || 'http://ec2-13-50-232-194.eu-north-1.compute.amazonaws.com:18529';
+const ARANGO_DB = process.env.ARANGO_DB || 'evaluationResults';
+const ARANGO_USERNAME = process.env.ARANGO_USERNAME || 'root';
+const ARANGO_PASSWORD = process.env.ARANGO_PASSWORD || '';
 
 /**
  * GET /api/tazama/arango/transactions
@@ -12,37 +18,59 @@ export async function GET(request: NextRequest) {
     const customerId = searchParams.get('customer_id');
     const id = searchParams.get('id');
     
-    let data;
+    // Build AQL query based on parameters
+    let aqlQuery = 'FOR doc IN transactions';
+    const bindVars: Record<string, any> = {};
     
     if (id) {
-      // Fetch specific transaction by ID
-      data = await arangoClient.getTransactionById(id);
-      
-      if (!data) {
-        return NextResponse.json(
-          { success: false, error: 'Transaction not found' },
-          { status: 404 }
-        );
-      }
+      aqlQuery += ' FILTER doc._key == @id OR doc.transaction_id == @id';
+      bindVars.id = id;
     } else if (customerId) {
-      // Fetch transactions for a specific customer
-      data = await arangoClient.getTransactionsByCustomerId(customerId, limit);
-    } else {
-      // Fetch all transactions
-      data = await arangoClient.getAllTransactions(limit);
+      aqlQuery += ' FILTER doc.customer_id == @customerId';
+      bindVars.customerId = customerId;
     }
     
-    // Ensure we always return an array for consistent handling
-    const responseData = Array.isArray(data) ? data : data ? [data] : [];
+    aqlQuery += ' SORT doc.timestamp DESC LIMIT @limit RETURN doc';
+    bindVars.limit = limit;
     
+    // Make request to ArangoDB
+    const response = await axios.post(
+      `${ARANGO_URL}/_db/${ARANGO_DB}/_api/cursor`,
+      {
+        query: aqlQuery,
+        bindVars,
+        batchSize: limit
+      },
+      {
+        auth: {
+          username: ARANGO_USERNAME,
+          password: ARANGO_PASSWORD
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }
+    );
+    
+    // Return the results
     return NextResponse.json({
       success: true,
-      data: responseData,
+      data: response.data.result || [],
     });
   } catch (error) {
     console.error('Error fetching transactions from ArangoDB:', error);
+    
+    // Provide more detailed error information
+    let errorMessage = 'Failed to fetch transactions';
+    if (axios.isAxiosError(error)) {
+      errorMessage = error.response?.data?.errorMessage || error.message;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch transactions' },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
