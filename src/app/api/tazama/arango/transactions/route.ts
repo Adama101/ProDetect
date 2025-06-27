@@ -33,9 +33,11 @@ export async function GET(request: NextRequest) {
     aqlQuery += ' SORT doc.timestamp DESC LIMIT @limit RETURN doc';
     bindVars.limit = limit;
     
+    console.log('Executing AQL query:', aqlQuery, bindVars);
+    
     // Make request to ArangoDB
     const response = await axios.post(
-      `${ARANGO_URL}/_db/${ARANGO_DB}/_api/cursor`,
+      `${ARANGO_URL}/_api/cursor`,
       {
         query: aqlQuery,
         bindVars,
@@ -53,6 +55,8 @@ export async function GET(request: NextRequest) {
       }
     );
     
+    console.log('ArangoDB response:', response.status, response.statusText);
+    
     // Return the results
     return NextResponse.json({
       success: true,
@@ -65,6 +69,11 @@ export async function GET(request: NextRequest) {
     let errorMessage = 'Failed to fetch transactions';
     if (axios.isAxiosError(error)) {
       errorMessage = error.response?.data?.errorMessage || error.message;
+      console.error('Axios error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data
+      });
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }

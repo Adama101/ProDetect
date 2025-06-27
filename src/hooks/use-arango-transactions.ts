@@ -135,3 +135,101 @@ export function useArangoTransaction(id: string) {
     refetch: fetchTransaction,
   };
 }
+
+export function useArangoEvaluations(options: {
+  limit?: number;
+  transactionId?: string;
+} = {}) {
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const { toast } = useToast();
+
+  const fetchEvaluations = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (options.limit) params.append('limit', options.limit.toString());
+      if (options.transactionId) params.append('transaction_id', options.transactionId);
+      
+      // Fetch evaluations from our API endpoint
+      const response = await axios.get(`/api/tazama/arango/evaluations?${params.toString()}`);
+      
+      if (response.data.success) {
+        setData(response.data.data || []);
+      } else {
+        throw new Error(response.data.error || 'Failed to fetch evaluations');
+      }
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      setError(error);
+      
+      toast({
+        title: 'Error',
+        description: `Failed to fetch evaluations: ${error.message}`,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [options, toast]);
+
+  useEffect(() => {
+    fetchEvaluations();
+  }, [fetchEvaluations]);
+
+  return {
+    data,
+    isLoading,
+    error,
+    refetch: fetchEvaluations,
+  };
+}
+
+export function useArangoStats() {
+  const [data, setData] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const { toast } = useToast();
+
+  const fetchStats = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // Fetch stats from our API endpoint
+      const response = await axios.get('/api/tazama/arango/stats');
+      
+      if (response.data.success) {
+        setData(response.data.data || null);
+      } else {
+        throw new Error(response.data.error || 'Failed to fetch database statistics');
+      }
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      setError(error);
+      
+      toast({
+        title: 'Error',
+        description: `Failed to fetch database statistics: ${error.message}`,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast]);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  return {
+    data,
+    isLoading,
+    error,
+    refetch: fetchStats,
+  };
+}
