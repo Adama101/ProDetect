@@ -116,7 +116,8 @@ export function TransactionDetailsModal({
               </DialogDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={riskBadgeVariant}>{transaction.risk} Risk</Badge>
+              {/* <Badge variant={riskBadgeVariant}>{transaction.risk} Risk</Badge> */}
+              <Badge variant={riskBadgeVariant as "default" | "secondary" | "outline" | "warning" | "destructive" | null | undefined}>{transaction.risk} Risk</Badge>
               <Badge
                 variant={
                   transaction.status === "Completed"

@@ -37,10 +37,11 @@ interface AlertItem {
   source: string; // e.g., "Real-time Monitoring", "Batch Screening"
 }
 
+//Mock Placeholder data
 const mockAlerts: AlertItem[] = [
-  { id: 'ALT001', description: 'Potential watchlist match: Johnathan K. Doe', date: '2024-07-15', severity: 'Critical', status: 'Open', entity: 'Client Acc XA1001', assignedTo: 'AML Team Lead', riskScore: 95, caseStatus: 'Pending Review', tags: ['Sanctions', 'KYC'], source: 'Watchlist Screening'},
+  { id: 'ALT001', description: 'Potential watchlist match: John Darboe', date: '2024-07-15', severity: 'Critical', status: 'Open', entity: 'Client Acc XA1001', assignedTo: 'AML Team Lead', riskScore: 95, caseStatus: 'Pending Review', tags: ['Sanctions', 'KYC'], source: 'Watchlist Screening'},
   { id: 'ALT002', description: 'Unusual transaction pattern: High volume, low value to new beneficiary', date: '2024-07-14', severity: 'High', status: 'In Review', entity: 'Merchant M5050 / TXN77882', assignedTo: 'Fraud Analyst B', riskScore: 82, caseStatus: 'Investigation', tags: ['AML', 'Transaction Monitoring', 'Behavioral Anomaly'], source: 'Real-time Monitoring'},
-  { id: 'ALT003', description: 'Name variation: Jane Smith vs. Janne Smyth (DOB Match)', date: '2024-07-13', severity: 'Medium', status: 'Open', entity: 'Beneficiary B007', assignedTo: 'Analyst A', riskScore: 65, caseStatus: 'New', tags: ['KYC'], source: 'Fuzzy Matching Engine'},
+  { id: 'ALT003', description: 'Name variation: Jane Smith vs. Jann Smyth (DOB Match)', date: '2024-07-13', severity: 'Medium', status: 'Open', entity: 'Beneficiary B007', assignedTo: 'Analyst A', riskScore: 65, caseStatus: 'New', tags: ['KYC'], source: 'Fuzzy Matching Engine'},
   { id: 'ALT004', description: 'Address anomaly flagged during onboarding', date: '2024-07-12', severity: 'Low', status: 'Resolved', entity: 'Customer CUST9923', assignedTo: 'System (Auto-Resolved)', riskScore: 30, caseStatus: 'Closed - False Positive', tags: ['KYC'], source: 'Onboarding Check'},
   { id: 'ALT005', description: 'High-risk country transaction to PEP', date: '2024-07-11', severity: 'High', status: 'Open', entity: 'Payment P00123 ($50,000)', assignedTo: 'Compliance Officer', riskScore: 88, caseStatus: 'Escalated', tags: ['AML', 'Sanctions'], source: 'Transaction Monitoring'},
   { id: 'ALT006', description: 'Login from unrecognized device & location', date: '2024-07-10', severity: 'Medium', status: 'Closed', entity: 'User U7362', assignedTo: 'System (User Verified)', riskScore: 55, caseStatus: 'Closed - Valid', tags: ['Fraud', 'Behavioral Anomaly'], source: 'Security Module'},

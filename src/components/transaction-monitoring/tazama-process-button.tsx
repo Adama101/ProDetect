@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Zap, Loader2 } from 'lucide-react';
 import { useProcessTransaction } from '@/hooks/use-tazama';
-import { useToast } from '@/components/ui/use-toast';
 
 interface TazamaProcessButtonProps {
   transactionId: string;

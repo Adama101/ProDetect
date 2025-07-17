@@ -1,4 +1,4 @@
-import { db, PaginationOptions, PaginatedResult, buildPaginationQuery } from '@/lib/database/connection';
+import { db, PaginationOptions, PaginatedResult, buildPaginationQuery } from '@/lib/database/arangoTransactionService';
 
 export interface Customer {
   id: string;

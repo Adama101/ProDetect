@@ -112,15 +112,15 @@ export function RiskTrendChart() {
   const series = [
     {
       name: "Overall Risk",
-      data: [62, 60, 63, 65, 61, 64, 62, 65, 65, 64, 63, 61],
+      data: [2, 0, 3, 5, 1, 4, 2, 0, 0, 0, 0, 0],
     },
     {
       name: "Fraud Attempts",
-      data: [15, 12, 10, 14, 16, 12, 8, 10, 7, 9, 11, 10],
+      data: [5, 2, 0, 4, 6, 2, 8, 0, 0, 0, 0, 0],
     },
     {
       name: "Compliance Alerts",
-      data: [8, 10, 12, 15, 13, 16, 18, 14, 15, 13, 12, 14],
+      data: [8, 0, 2, 5, 3, 6, 8, 4, 0, 0, 0, 0],
     },
   ];
 

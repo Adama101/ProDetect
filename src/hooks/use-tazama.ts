@@ -17,7 +17,7 @@ export function useTazamaHealth(options?: UseTazamaOptions) {
       setIsLoading(true);
       setError(null);
       // This is the System Health Checker
-      const response = await fetch('/api/tazama/health');
+      const response = await fetch('http://ec2-13-50-232-194.eu-north-1.compute.amazonaws.com:5000/');
       
       if (!response.ok) {
         throw new Error(`Failed to check Tazama health: ${response.statusText}`);
@@ -25,20 +25,35 @@ export function useTazamaHealth(options?: UseTazamaOptions) {
       
       const result = await response.json();
       
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to check Tazama health');
+      // Handle direct response format (no wrapper)
+      if (result.status === 'UP') {
+        const healthData = {
+          status: result.status,
+          version: result.version || 'Unknown'
+        };
+        
+        setData(healthData);
+        options?.onSuccess?.(healthData);
+        
+        // Success toast for healthy system
+        toast({
+          title: 'System Health Check Passed',
+          description: `Tazama system is healthy and running (Status: ${result.status})`,
+          variant: 'default',
+        });
+      } else {
+        throw new Error(`System status is ${result.status || 'Unknown'}`);
       }
       
-      setData(result.data);
-      options?.onSuccess?.(result.data);
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
       setError(error);
       options?.onError?.(error);
       
+      // Error toast for failed health check
       toast({
-        title: 'Error',
-        description: error.message,
+        title: 'System Health Check Failed',
+        description: `Tazama system is not responding properly: ${error.message}`,
         variant: 'destructive',
       });
     } finally {
@@ -297,5 +312,46 @@ export function useBatchSyncCustomers(options?: UseTazamaOptions) {
     isLoading,
     error,
     batchSyncCustomers,
+  };
+}
+export function useTransactions(options?: UseTazamaOptions) {
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+  const { toast } = useToast();
+
+  const fetchTransactions = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const response = await fetch('/api/transactions');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch transactions: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setTransactions(data);
+      options?.onSuccess?.(data);
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      setError(error);
+      options?.onError?.(error);
+
+      toast({
+        title: 'Failed to Fetch Transactions',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [options, toast]);
+
+  return {
+    transactions,
+    isLoading,
+    error,
+    fetchTransactions,
   };
 }

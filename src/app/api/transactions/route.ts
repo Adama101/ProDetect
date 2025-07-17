@@ -1,67 +1,89 @@
+// app/api/transactions/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { transactionService } from '@/lib/api/transactions';
+import { arangoTransactionService } from '@/lib/database/arangoTransactionService';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     
-    const options = {
-      page: parseInt(searchParams.get('page') || '1'),
-      limit: parseInt(searchParams.get('limit') || '20'),
-      customer_id: searchParams.get('customer_id') || undefined,
-      status: searchParams.get('status') || undefined,
-      transaction_type: searchParams.get('transaction_type') || undefined,
-      channel: searchParams.get('channel') || undefined,
-      min_amount: searchParams.get('min_amount') ? parseFloat(searchParams.get('min_amount')!) : undefined,
-      max_amount: searchParams.get('max_amount') ? parseFloat(searchParams.get('max_amount')!) : undefined,
-      start_date: searchParams.get('start_date') || undefined,
-      end_date: searchParams.get('end_date') || undefined,
-      min_risk_score: searchParams.get('min_risk_score') ? parseInt(searchParams.get('min_risk_score')!) : undefined,
-      sortBy: searchParams.get('sortBy') || undefined,
-      sortOrder: (searchParams.get('sortOrder') as 'ASC' | 'DESC') || undefined,
-    };
-
-    const result = await transactionService.getTransactions(options);
+    // Parse query parameters
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
+    const status = searchParams.get('status') || 'all';
+    const searchTerm = searchParams.get('search') || '';
+    const dateFrom = searchParams.get('dateFrom') ? new Date(searchParams.get('dateFrom')!) : undefined;
+    const dateTo = searchParams.get('dateTo') ? new Date(searchParams.get('dateTo')!) : undefined;
+    
+    // Fetch transactions from ArangoDB
+    const [transactions, totalCount] = await Promise.all([
+      arangoTransactionService.getTransactions({
+        limit,
+        offset,
+        status: status !== 'all' ? status : undefined,
+        searchTerm: searchTerm || undefined,
+        dateFrom,
+        dateTo
+      }),
+      arangoTransactionService.getTransactionCount({
+        status: status !== 'all' ? status : undefined,
+        searchTerm: searchTerm || undefined,
+        dateFrom,
+        dateTo
+      })
+    ]);
+    
+    // Transform to UI format
+    const transformedTransactions = transactions.map(doc => 
+      arangoTransactionService.transformToUITransaction(doc)
+    );
     
     return NextResponse.json({
-      success: true,
-      data: result.data,
-      pagination: result.pagination,
+      transactions: transformedTransactions,
+      pagination: {
+        total: totalCount,
+        limit,
+        offset,
+        hasMore: offset + limit < totalCount
+      }
     });
+    
   } catch (error) {
-    console.error('Error fetching transactions:', error);
+    console.error('Error in transactions API:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch transactions' },
+      { error: 'Failed to fetch transactions' },
       { status: 500 }
     );
   }
 }
 
+// POST endpoint for processing transactions through Tazama
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const { transactionIds, batchProcess } = await request.json();
     
-    // Validate required fields
-    const requiredFields = ['transaction_id', 'customer_id', 'amount', 'transaction_type', 'channel'];
-    for (const field of requiredFields) {
-      if (!body[field]) {
-        return NextResponse.json(
-          { success: false, error: `Missing required field: ${field}` },
-          { status: 400 }
-        );
-      }
+    if (batchProcess && Array.isArray(transactionIds)) {
+      // Use your existing Tazama service for batch processing
+      const { tazamaService } = await import('@/lib/tazama/service');
+      const results = await tazamaService.batchProcessTransactions(transactionIds);
+      
+      return NextResponse.json({ results });
+    } else if (transactionIds) {
+      // Process single transaction
+      const { tazamaService } = await import('@/lib/tazama/service');
+      const result = await tazamaService.processTransaction(transactionIds);
+      
+      return NextResponse.json({ result });
     }
-
-    const transaction = await transactionService.createTransaction(body);
     
-    return NextResponse.json({
-      success: true,
-      data: transaction,
-    }, { status: 201 });
-  } catch (error) {
-    console.error('Error creating transaction:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create transaction' },
+      { error: 'Invalid request parameters' },
+      { status: 400 }
+    );
+    
+  } catch (error) {
+    console.error('Error processing transactions:', error);
+    return NextResponse.json(
+      { error: 'Failed to process transactions' },
       { status: 500 }
     );
   }

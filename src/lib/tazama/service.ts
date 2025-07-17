@@ -1,6 +1,6 @@
 import { tazamaClient, TazamaRuleEvaluationResult } from './client';
 import { TazamaMapper } from './mapper';
-import { db } from '@/lib/database/connection';
+import { db } from '@/lib/database/arangoTransactionService';
 import { customerService } from '@/lib/api/customers';
 import { transactionService } from '@/lib/api/transactions';
 import { alertService } from '@/lib/api/alerts';
