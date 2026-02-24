@@ -109,6 +109,19 @@ The application uses **PostgreSQL** with a comprehensive schema designed for com
 - ✅ **Automated setup** script for easy configuration
 - ✅ **Performance optimized** with proper indexing
 
+### Using Supabase (optional)
+
+To connect the app to your **Supabase** project and use it for all data (full CRUD on customers, transactions, alerts):
+
+1. Create a project at [supabase.com](https://supabase.com) and run the migrations in `supabase/migrations/` (e.g. `supabase db push` or run the SQL in the Supabase SQL editor).
+2. In `.env`, set:
+   - `NEXT_PUBLIC_SUPABASE_URL` – your project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` – anon/public key (for auth and client)
+   - `SUPABASE_SERVICE_ROLE_KEY` – service role key (for server-side full CRUD; keep secret)
+3. Restart the dev server. The app will use Supabase for all database operations when these are set.
+
+Auth (sign-in/sign-up) already uses Supabase when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are set.
+
 ## 🔧 API Endpoints
 
 ### Core APIs
@@ -336,7 +349,3 @@ For technical support or questions:
 - Create an issue in the repository
 - Contact the development team
 - Refer to the documentation
-
----
-
-**ProDetect** - Advanced AI-Native Compliance Platform for African Financial Institutions

@@ -402,7 +402,376 @@ export class PostgresService {
       return false;
     }
   }
+
+  async createCustomer(data: {
+    customer_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone?: string;
+    date_of_birth?: string;
+    nationality?: string;
+    address?: any;
+    occupation?: string;
+    employer?: string;
+    monthly_income?: number;
+  }): Promise<Customer> {
+    const result = await query(
+      `INSERT INTO customers (
+        customer_id, first_name, last_name, email, phone, date_of_birth,
+        nationality, address, occupation, metadata
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      RETURNING *`,
+      [
+        data.customer_id,
+        data.first_name,
+        data.last_name,
+        data.email,
+        data.phone ?? null,
+        data.date_of_birth ?? null,
+        data.nationality ?? null,
+        JSON.stringify({
+          address: data.address,
+          employer: data.employer,
+          monthly_income: data.monthly_income,
+        }),
+        data.occupation ?? null,
+        "{}",
+      ]
+    );
+    return result.rows[0];
+  }
+
+  async updateCustomer(
+    id: string,
+    data: Record<string, any>
+  ): Promise<Customer | null> {
+    const fields: string[] = [];
+    const params: any[] = [];
+    let i = 1;
+    const allowed = [
+      "first_name", "last_name", "email", "phone", "date_of_birth",
+      "nationality", "occupation", "kyc_status", "risk_rating", "risk_score",
+      "pep_status", "sanctions_match", "account_status",
+    ];
+    for (const key of allowed) {
+      if (data[key] !== undefined) {
+        fields.push(`${key} = $${i}`);
+        params.push(data[key]);
+        i++;
+      }
+    }
+    if (fields.length === 0) return this.getCustomerById(id);
+    fields.push("updated_at = NOW()");
+    params.push(id);
+    const result = await query(
+      `UPDATE customers SET ${fields.join(", ")} WHERE id = $${i} RETURNING *`,
+      params
+    );
+    return result.rows[0] ?? null;
+  }
+
+  async updateKycStatus(
+    id: string,
+    status: string,
+    _documents?: any[]
+  ): Promise<Customer | null> {
+    const result = await query(
+      "UPDATE customers SET kyc_status = $1, updated_at = NOW() WHERE id = $2 RETURNING *",
+      [status, id]
+    );
+    return result.rows[0] ?? null;
+  }
+
+  async getCustomerStats(): Promise<{
+    total: number;
+    byRiskRating: Record<string, number>;
+    byKycStatus: Record<string, number>;
+    byAccountStatus: Record<string, number>;
+    recentOnboarding: number;
+  }> {
+    const [totalR, riskR, kycR, recentR] = await Promise.all([
+      query("SELECT COUNT(*) as count FROM customers"),
+      query("SELECT risk_rating, COUNT(*) as count FROM customers GROUP BY risk_rating"),
+      query("SELECT kyc_status, COUNT(*) as count FROM customers GROUP BY kyc_status"),
+      query("SELECT COUNT(*) as count FROM customers WHERE onboarding_date >= NOW() - INTERVAL '30 days'"),
+    ]);
+    return {
+      total: parseInt(totalR.rows[0]?.count ?? "0"),
+      byRiskRating: Object.fromEntries(
+        riskR.rows.map((r: any) => [r.risk_rating, parseInt(r.count)])
+      ),
+      byKycStatus: Object.fromEntries(
+        kycR.rows.map((r: any) => [r.kyc_status, parseInt(r.count)])
+      ),
+      byAccountStatus: { active: 0, suspended: 0, closed: 0, frozen: 0 },
+      recentOnboarding: parseInt(recentR.rows[0]?.count ?? "0"),
+    };
+  }
+
+  async deleteCustomer(id: string): Promise<boolean> {
+    try {
+      await query("DELETE FROM customers WHERE id = $1", [id]);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async createTransaction(
+    data: Omit<Transaction, "id" | "created_at" | "updated_at">
+  ): Promise<Transaction | null> {
+    try {
+      const result = await query(
+        `INSERT INTO transactions (
+          transaction_id, customer_id, amount, currency, transaction_type,
+          channel, counterparty, location, device_info, ip_address, timestamp, status, risk_score, metadata
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        RETURNING *`,
+        [
+          data.transaction_id,
+          data.customer_id,
+          data.amount,
+          data.currency,
+          data.transaction_type,
+          data.channel,
+          JSON.stringify(data.counterparty ?? {}),
+          JSON.stringify(data.location ?? {}),
+          JSON.stringify(data.device_info ?? {}),
+          data.ip_address,
+          data.timestamp,
+          data.status ?? "pending",
+          data.risk_score,
+          JSON.stringify(data.metadata ?? {}),
+        ]
+      );
+      return result.rows[0] ?? null;
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      return null;
+    }
+  }
+
+  async getTransactionStats(): Promise<{
+    total: number;
+    byStatus: Record<string, number>;
+    byType: Record<string, number>;
+    totalAmount: number;
+    averageAmount: number;
+  }> {
+    const [totalR, statusR, typeR, amountR] = await Promise.all([
+      query("SELECT COUNT(*) as count FROM transactions"),
+      query("SELECT status, COUNT(*) as count FROM transactions GROUP BY status"),
+      query("SELECT transaction_type, COUNT(*) as count FROM transactions GROUP BY transaction_type"),
+      query("SELECT SUM(amount) as total, AVG(amount) as average FROM transactions"),
+    ]);
+    return {
+      total: parseInt(totalR.rows[0]?.count ?? "0"),
+      byStatus: Object.fromEntries(
+        statusR.rows.map((r: any) => [r.status, parseInt(r.count)])
+      ),
+      byType: Object.fromEntries(
+        typeR.rows.map((r: any) => [r.transaction_type, parseInt(r.count)])
+      ),
+      totalAmount: parseFloat(amountR.rows[0]?.total ?? "0"),
+      averageAmount: parseFloat(amountR.rows[0]?.average ?? "0"),
+    };
+  }
+
+  async updateAlertStatus(
+    id: string,
+    status: string,
+    resolutionNotes?: string
+  ): Promise<Alert | null> {
+    try {
+      const result = await query(
+        `UPDATE alerts SET status = $1,
+          resolved_at = CASE WHEN $1 IN ('resolved', 'false_positive') THEN now() ELSE resolved_at END,
+          notes = COALESCE($2, notes), updated_at = now()
+         WHERE id = $3 RETURNING *`,
+        [status, resolutionNotes, id]
+      );
+      return result.rows[0] ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  async assignAlert(id: string, userId: string): Promise<Alert | null> {
+    try {
+      const result = await query(
+        "UPDATE alerts SET assigned_to = $1, updated_at = now() WHERE id = $2 RETURNING *",
+        [userId, id]
+      );
+      return result.rows[0] ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  async escalateAlert(id: string, reason?: string): Promise<Alert | null> {
+    try {
+      const result = await query(
+        `UPDATE alerts SET
+          severity = CASE WHEN severity = 'low' THEN 'medium' WHEN severity = 'medium' THEN 'high' WHEN severity = 'high' THEN 'critical' ELSE severity END,
+          metadata = jsonb_set(COALESCE(metadata, '{}'), '{escalation_reason}', to_jsonb($2)),
+          updated_at = now()
+         WHERE id = $1 RETURNING *`,
+        [id, reason ?? "Manual escalation"]
+      );
+      return result.rows[0] ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  async getAlertAnalytics(
+    _startDate?: string,
+    _endDate?: string
+  ): Promise<{
+    totalAlerts: number;
+    openAlerts: number;
+    resolvedAlerts: number;
+    falsePositives: number;
+    averageResolutionTime: number;
+    severityDistribution: Record<string, number>;
+    typeDistribution: Record<string, number>;
+    trendsData: Array<{ date: string; count: number; resolved: number }>;
+  }> {
+    try {
+      const [totalsR, severityR, typeR, trendsR, resolutionR] = await Promise.all([
+        query(`SELECT COUNT(*) as total_alerts,
+          COUNT(CASE WHEN status = 'open' THEN 1 END) as open_alerts,
+          COUNT(CASE WHEN status IN ('resolved','false_positive') THEN 1 END) as resolved_alerts,
+          COUNT(CASE WHEN status = 'false_positive' THEN 1 END) as false_positives FROM alerts`),
+        query("SELECT severity, COUNT(*) as count FROM alerts GROUP BY severity"),
+        query("SELECT alert_type, COUNT(*) as count FROM alerts GROUP BY alert_type"),
+        query(`SELECT DATE(created_at) as date, COUNT(*) as count,
+          COUNT(CASE WHEN status IN ('resolved','false_positive') THEN 1 END) as resolved
+          FROM alerts GROUP BY DATE(created_at) ORDER BY date DESC LIMIT 30`),
+        query(`SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (updated_at - created_at))/3600), 0) as avg_resolution_hours
+          FROM alerts WHERE status IN ('resolved','false_positive')`),
+      ]);
+      return {
+        totalAlerts: parseInt(totalsR.rows[0]?.total_alerts ?? "0"),
+        openAlerts: parseInt(totalsR.rows[0]?.open_alerts ?? "0"),
+        resolvedAlerts: parseInt(totalsR.rows[0]?.resolved_alerts ?? "0"),
+        falsePositives: parseInt(totalsR.rows[0]?.false_positives ?? "0"),
+        averageResolutionTime: parseFloat(resolutionR.rows[0]?.avg_resolution_hours ?? "0"),
+        severityDistribution: Object.fromEntries(
+          severityR.rows.map((r: any) => [r.severity, parseInt(r.count)])
+        ),
+        typeDistribution: Object.fromEntries(
+          typeR.rows.map((r: any) => [r.alert_type, parseInt(r.count)])
+        ),
+        trendsData: trendsR.rows.map((r: any) => ({
+          date: r.date,
+          count: parseInt(r.count),
+          resolved: parseInt(r.resolved),
+        })),
+      };
+    } catch {
+      return {
+        totalAlerts: 0,
+        openAlerts: 0,
+        resolvedAlerts: 0,
+        falsePositives: 0,
+        averageResolutionTime: 0,
+        severityDistribution: {},
+        typeDistribution: {},
+        trendsData: [],
+      };
+    }
+  }
+
+  async getHighPriorityAlerts(limit: number = 10): Promise<Alert[]> {
+    try {
+      const result = await query(
+        `SELECT * FROM alerts WHERE status = 'open' AND severity IN ('high','critical')
+         ORDER BY CASE severity WHEN 'critical' THEN 1 WHEN 'high' THEN 2 ELSE 3 END, created_at DESC LIMIT $1`,
+        [limit]
+      );
+      return result.rows;
+    } catch {
+      return [];
+    }
+  }
+
+  async bulkUpdateAlerts(
+    alertIds: string[],
+    updates: { status?: string; assigned_to?: string; notes?: string }
+  ): Promise<number> {
+    if (alertIds.length === 0) return 0;
+    try {
+      const sets: string[] = ["updated_at = now()"];
+      const params: any[] = [];
+      let i = 1;
+      if (updates.status !== undefined) {
+        sets.push(`status = $${i}`);
+        params.push(updates.status);
+        i++;
+      }
+      if (updates.assigned_to !== undefined) {
+        sets.push(`assigned_to = $${i}`);
+        params.push(updates.assigned_to);
+        i++;
+      }
+      if (updates.notes !== undefined) {
+        sets.push(`notes = $${i}`);
+        params.push(updates.notes);
+        i++;
+      }
+      params.push(alertIds);
+      const result = await query(
+        `UPDATE alerts SET ${sets.join(", ")} WHERE id = ANY($${i})`,
+        params
+      );
+      return result.rowCount ?? 0;
+    } catch {
+      return 0;
+    }
+  }
+
+  async getAlertSummary(): Promise<{
+    total: number;
+    open: number;
+    critical: number;
+    high: number;
+    recentTrend: number;
+  }> {
+    try {
+      const [summaryR, trendR] = await Promise.all([
+        query(`SELECT COUNT(*) as total, COUNT(CASE WHEN status = 'open' THEN 1 END) as open,
+          COUNT(CASE WHEN severity = 'critical' THEN 1 END) as critical,
+          COUNT(CASE WHEN severity = 'high' THEN 1 END) as high FROM alerts`),
+        query("SELECT COUNT(*) as trend FROM alerts WHERE created_at >= NOW() - INTERVAL '24 hours'"),
+      ]);
+      return {
+        total: parseInt(summaryR.rows[0]?.total ?? "0"),
+        open: parseInt(summaryR.rows[0]?.open ?? "0"),
+        critical: parseInt(summaryR.rows[0]?.critical ?? "0"),
+        high: parseInt(summaryR.rows[0]?.high ?? "0"),
+        recentTrend: parseInt(trendR.rows[0]?.trend ?? "0"),
+      };
+    } catch {
+      return { total: 0, open: 0, critical: 0, high: 0, recentTrend: 0 };
+    }
+  }
 }
 
-export const postgresService = new PostgresService();
+function getDbService(): PostgresService {
+  if (
+    typeof process !== 'undefined' &&
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  ) {
+    const { supabaseService } = require('./supabaseService');
+    return supabaseService as PostgresService;
+  }
+  return new PostgresService();
+}
+
+export const postgresService = getDbService();
+
+
 

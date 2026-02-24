@@ -108,35 +108,7 @@ export class CustomerService {
 
   // Create new customer
   async createCustomer(data: CreateCustomerData): Promise<Customer> {
-    // This would need to be implemented in the PostgreSQL service
-    // For now, we'll use a basic approach
-    const { query } = await import("@/lib/database/postgres");
-
-    const result = await query(
-      `INSERT INTO customers (
-        customer_id, first_name, last_name, email, phone, date_of_birth,
-        nationality, address, occupation, metadata
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      RETURNING *`,
-      [
-        data.customer_id,
-        data.first_name,
-        data.last_name,
-        data.email,
-        data.phone,
-        data.date_of_birth,
-        data.nationality,
-        JSON.stringify({
-          address: data.address,
-          employer: data.employer,
-          monthly_income: data.monthly_income,
-        }),
-        data.occupation,
-        "{}",
-      ]
-    );
-
-    return result.rows[0];
+    return postgresService.createCustomer(data);
   }
 
   // Update customer
@@ -144,41 +116,7 @@ export class CustomerService {
     id: string,
     data: UpdateCustomerData
   ): Promise<Customer | null> {
-    const { query } = await import("@/lib/database/postgres");
-
-    const fields: string[] = [];
-    const params: any[] = [];
-    let paramIndex = 1;
-
-    // Build dynamic update query
-    Object.entries(data).forEach(([key, value]) => {
-      if (value !== undefined) {
-        if (
-          key !== "address" &&
-          key !== "employer" &&
-          key !== "monthly_income"
-        ) {
-          fields.push(`${key} = $${paramIndex}`);
-          params.push(value);
-          paramIndex++;
-        }
-      }
-    });
-
-    if (fields.length === 0) {
-      return this.getCustomerById(id);
-    }
-
-    const queryText = `
-      UPDATE customers 
-      SET ${fields.join(", ")}, updated_at = now()
-      WHERE id = $${paramIndex}
-      RETURNING *
-    `;
-    params.push(id);
-
-    const result = await query(queryText, params);
-    return result.rows.length > 0 ? result.rows[0] : null;
+    return postgresService.updateCustomer(id, data as Record<string, any>);
   }
 
   // Update KYC status
@@ -187,17 +125,7 @@ export class CustomerService {
     status: Customer["kyc_status"],
     documents?: any[]
   ): Promise<Customer | null> {
-    const { query } = await import("@/lib/database/postgres");
-
-    const result = await query(
-      `UPDATE customers 
-       SET kyc_status = $1, updated_at = now()
-       WHERE id = $2
-       RETURNING *`,
-      [status, id]
-    );
-
-    return result.rows.length > 0 ? result.rows[0] : null;
+    return postgresService.updateKycStatus(id, status, documents);
   }
 
   // Update risk assessment
@@ -256,50 +184,12 @@ export class CustomerService {
     byAccountStatus: Record<string, number>;
     recentOnboarding: number;
   }> {
-    const { query } = await import("@/lib/database/postgres");
-
-    const [
-      totalResult,
-      riskRatingStats,
-      kycStatusStats,
-      recentOnboardingResult,
-    ] = await Promise.all([
-      query("SELECT COUNT(*) as count FROM customers"),
-      query(
-        "SELECT risk_rating, COUNT(*) as count FROM customers GROUP BY risk_rating"
-      ),
-      query(
-        "SELECT kyc_status, COUNT(*) as count FROM customers GROUP BY kyc_status"
-      ),
-      query(
-        "SELECT COUNT(*) as count FROM customers WHERE onboarding_date >= NOW() - INTERVAL '30 days'"
-      ),
-    ]);
-
-    return {
-      total: parseInt(totalResult.rows[0]?.count || "0"),
-      byRiskRating: Object.fromEntries(
-        riskRatingStats.rows.map((stat: any) => [
-          stat.risk_rating,
-          parseInt(stat.count),
-        ])
-      ),
-      byKycStatus: Object.fromEntries(
-        kycStatusStats.rows.map((stat: any) => [
-          stat.kyc_status,
-          parseInt(stat.count),
-        ])
-      ),
-      byAccountStatus: { active: 0, suspended: 0, closed: 0, frozen: 0 }, // Placeholder
-      recentOnboarding: parseInt(recentOnboardingResult.rows[0]?.count || "0"),
-    };
+    return postgresService.getCustomerStats();
   }
 
-  // Delete customer (soft delete by changing status)
+  // Delete customer
   async deleteCustomer(id: string): Promise<boolean> {
-    // Since we don't have account_status in the current schema, we'll just return true
-    // In a real implementation, you'd update the status
-    return true;
+    return postgresService.deleteCustomer(id);
   }
 }
 

@@ -138,7 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                         pathname === '/forgot-password' ||
                         pathname === '/reset-password';
     
-    if (!user && !isAuthRoute && pathname !== '/') {
+    if (!user && !isAuthRoute) {
       router.push('/login');
     } else if (user && isAuthRoute) {
       router.push('/');
@@ -216,27 +216,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       
       if (data.user) {
-        // Create user profile in the database
+        // Create or update user profile (trigger may have already created one; upsert allows anyone to sign up)
         const { error: profileError } = await supabase
           .from('user_profiles')
-          .insert({
-            user_id: data.user.id,
-            first_name: userData.firstName,
-            last_name: userData.lastName,
-            phone: userData.phone,
-            organization: userData.organization,
-            organization_country: userData.organizationCountry,
-            organization_sector: userData.organizationSector,
-            avatar_url: null,
-          });
+          .upsert(
+            {
+              user_id: data.user.id,
+              first_name: userData.firstName,
+              last_name: userData.lastName,
+              phone: userData.phone,
+              organization: userData.organization,
+              organization_country: userData.organizationCountry,
+              organization_sector: userData.organizationSector,
+              avatar_url: null,
+            },
+            { onConflict: 'user_id' }
+          );
         
         if (profileError) {
           console.error('Error creating user profile:', profileError);
-          // Consider deleting the auth user if profile creation fails
           throw profileError;
         }
         
-        // Fetch the created profile
         await fetchUserProfile(data.user.id);
       }
       

@@ -27,3 +27,5 @@ INSERT INTO rules (rule_id, name, description, category, priority, conditions, a
 ('RULE002', 'Risk Customer Transaction', 'Block transactions from high-risk customers', 'customer', 'high', '{"customer_risk": {"operator": ">=", "value": "high"}}', '{"action": "block", "reason": "High-risk customer"}'),
 ('RULE003', 'Location Mismatch', 'Flag transactions from unusual locations', 'location', 'medium', '{"location_change": {"operator": "==", "value": true}}', '{"action": "flag", "reason": "Location change detected"}');
 
+
+

@@ -74,3 +74,5 @@ echo "1. Start your Next.js application: npm run dev"
 echo "2. Test the database connection by visiting your app"
 echo "3. Check the console for database connection messages"
 
+
+

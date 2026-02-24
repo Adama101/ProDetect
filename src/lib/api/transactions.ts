@@ -62,38 +62,7 @@ export class TransactionService {
   async createTransaction(
     data: Omit<Transaction, "id" | "created_at" | "updated_at">
   ): Promise<Transaction | null> {
-    const { query } = await import("@/lib/database/postgres");
-
-    try {
-      const result = await query(
-        `INSERT INTO transactions (
-          transaction_id, customer_id, amount, currency, transaction_type,
-          channel, counterparty, location, device_info, ip_address, timestamp, status, risk_score, metadata
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-        RETURNING *`,
-        [
-          data.transaction_id,
-          data.customer_id,
-          data.amount,
-          data.currency,
-          data.transaction_type,
-          data.channel,
-          JSON.stringify(data.counterparty || {}),
-          JSON.stringify(data.location || {}),
-          JSON.stringify(data.device_info || {}),
-          data.ip_address,
-          data.timestamp,
-          data.status || "pending",
-          data.risk_score,
-          JSON.stringify(data.metadata || {}),
-        ]
-      );
-
-      return result.rows[0] || null;
-    } catch (error) {
-      console.error("Error creating transaction:", error);
-      return null;
-    }
+    return postgresService.createTransaction(data);
   }
 
   // Get transaction statistics
@@ -104,50 +73,7 @@ export class TransactionService {
     totalAmount: number;
     averageAmount: number;
   }> {
-    const { query } = await import("@/lib/database/postgres");
-
-    try {
-      const [totalResult, statusStats, typeStats, amountStats] =
-        await Promise.all([
-          query("SELECT COUNT(*) as count FROM transactions"),
-          query(
-            "SELECT status, COUNT(*) as count FROM transactions GROUP BY status"
-          ),
-          query(
-            "SELECT transaction_type, COUNT(*) as count FROM transactions GROUP BY transaction_type"
-          ),
-          query(
-            "SELECT SUM(amount) as total, AVG(amount) as average FROM transactions"
-          ),
-        ]);
-
-      return {
-        total: parseInt(totalResult.rows[0]?.count || "0"),
-        byStatus: Object.fromEntries(
-          statusStats.rows.map((stat: any) => [
-            stat.status,
-            parseInt(stat.count),
-          ])
-        ),
-        byType: Object.fromEntries(
-          typeStats.rows.map((stat: any) => [
-            stat.transaction_type,
-            parseInt(stat.count),
-          ])
-        ),
-        totalAmount: parseFloat(amountStats.rows[0]?.total || "0"),
-        averageAmount: parseFloat(amountStats.rows[0]?.average || "0"),
-      };
-    } catch (error) {
-      console.error("Error getting transaction stats:", error);
-      return {
-        total: 0,
-        byStatus: {},
-        byType: {},
-        totalAmount: 0,
-        averageAmount: 0,
-      };
-    }
+    return postgresService.getTransactionStats();
   }
 }
 
